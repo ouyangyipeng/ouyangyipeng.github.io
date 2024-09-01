@@ -5,12 +5,11 @@
 - **性别**：男 Male
 - **国籍民族**：中国 汉族 China Han
 - **邮箱**：ouyyp5@mail2.sysu.edu.cn
-- **微信**：owenweiyuan（请备注来意）
 
 ## >教育背景 Education Background
 - **2020.9-2023.7**  高中  广州市第二中学 GZEZ
 - **2023.9-至今**    本科  中山大学-计算机学院 SYSU-SCSE
-- 
+
 - **专业**：计算机科学与技术 Computer Science and Engineering
 
 ## >项目经验 Project Experience
@@ -51,4 +50,4 @@
 - 摄影
 
 ## >自我介绍 Introduction
-现就读于中山大学计算机本科2023级，属中山大学[ArcSysu](https://github.com/arcsysu)实验室（[张献伟](https://xianweiz.github.io/)教授）。合作于中山大学[HCPIIL](https://www.sysu-hcp.net/home/)实验室（[林倞](http://www.linliang.net/)教授，[刘阳](https://yangliu9208.github.io/)副教授）。
+现就读于中山大学计算机本科2023级，属中山大学[ArcSysu](https://github.com/arcsysu)实验室（[张献伟](https://xianweiz.github.io/)教授）。合作于中山大学[HCPII](https://www.sysu-hcp.net/home/)实验室（[林倞](http://www.linliang.net/)教授，[刘阳](https://yangliu9208.github.io/)副教授）。
