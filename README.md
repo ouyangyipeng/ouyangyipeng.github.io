@@ -173,3 +173,13 @@
 
 - AI Integrated Compilers
 - Embodied Intelligence
+
+<div align="center">
+  <p>
+    <img src="https://jojoee.jojoee.com/api/utcnowgif?utcnow" alt="Current UTC time">
+  </p>
+  <p>
+    You are No. 
+    <img src="https://profile-counter.glitch.me/ouyangyipeng/count.svg" alt="Visitor Count"> to visit me!
+  </p>
+</div>
