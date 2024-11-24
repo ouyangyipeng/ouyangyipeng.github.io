@@ -62,7 +62,11 @@
   <img src="https://img.shields.io/badge/-VSCode-%23007ACC?style=flat-square&logo=visual-studio-code" alt="VS Code">
 </div>
 
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=ouyangyipeng&layout=compact&theme=cobalt)](https://github.com/anuraghazra/github-readme-stats)
+<div align="center">
+  <a href="https://github.com/anuraghazra/github-readme-stats">
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=ouyangyipeng&layout=compact&theme=cobalt" alt="Top Languages">
+  </a>
+</div>
 
 **Currently working with:**
 
