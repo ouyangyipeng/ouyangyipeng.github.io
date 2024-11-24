@@ -5,6 +5,7 @@
   
 [![](https://img.shields.io/badge/-@ouyangyipeng-%23181717?style=flat-square&logo=github)](https://github.com/ouyangyipeng)
 [![](https://img.shields.io/website?color=0ab9e6&style=flat-square&up_message=OYYP&url=https%3A%2F%2Fouyangyipeng.github.io)](https://ouyangyipeng.github.io)
+
 </div>
 
 <p align="center"> <a href="https://github.com/ryo-ma/github-profile-trophy"><img src="https://github-profile-trophy.vercel.app/?username=ouyangyipeng&theme=onedark&column=4&margin-w=15&margin-h=15&no-frame=true&rank=-?,-C" alt="ouyangyipeng" /></a> </p>
@@ -26,10 +27,13 @@
 ## >My github stats 📈
 
 <p align="center"> <img src="https://github-readme-stats.vercel.app/api?username=ouyangyipeng&show_icons=true&theme=cobalt&count_private=true&card_width=495" alt="ouyangyipeng" />
+  
 <div align="center">
+  
   <img src="https://github-contributor-stats.vercel.app/api?username=ouyangyipeng&hide_contributor_rank=false&combine_all_yearly_contributions=true&limit=4&order_by=stars&&theme=synthwave" alt="OYYP's GitHub Repository Contribution stats" />
   
   [![GitHub Streak](https://streak-stats.demolab.com?user=ouyangyipeng&theme=vue-dark)](https://git.io/streak-stats)
+  
 </div>
 
 
@@ -140,7 +144,9 @@
 - 高尔夫 网球 台球 羽毛球 足球
 - 地质与矿晶 (地球物理研究 / 矿晶收藏)
 - 摄影
+
 ### 相关奖项
+
 - 2021届世界奥林匹克地理竞赛-中国赛区 金牌
 - 2022届世界奥林匹克地理竞赛队内前20
 - 第7届世界青少年书画大赛铜牌
