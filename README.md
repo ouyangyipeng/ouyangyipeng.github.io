@@ -12,7 +12,7 @@
 
 <p align="center">
   <a href="https://github.com/ryo-ma/github-profile-trophy">
-    <img src="https://github-profile-trophy.vercel.app/?username=ouyangyipeng&theme=onedark&column=4&margin-w=15&margin-h=15&no-frame=true&rank=-?,-C" alt="GitHub Trophy">
+    <img src="https://github-profile-trophy.vercel.app/?username=ouyangyipeng&theme=onedark&column=4&margin-w=15&margin-h=15&no-frame=true&rank=-?,-C,-B" alt="GitHub Trophy">
   </a>
 </p>
 
@@ -45,19 +45,41 @@
 - **国籍民族**：中国 汉族 China Han
 - **邮箱**：ouyyp5@mail2.sysu.edu.cn
 
-## >教育背景 Education Background
+## >个人经历 Personal Experience
 
 - **2020.9-2023.7**  高中  广州市第二中学 GZEZ
 - **2023.9-至今**    本科  中山大学-计算机学院 SYSU-CSE
+- **2023.10-至今**   本科  中山大学-ARCSYSU实验室
 
 - **专业**：计算机科学与技术 Computer Science and Engineering
 
-## >项目经验 Project Experience
-- **项目名称**：[ArcSysu-lang](https://github.com/arcsysu/SYsU-lang2)
-  - **角色**：助教 项目成员
-  - **工作内容**：项目改进 编写文档
+## >参与论文 Papers
+- XFuse: PTX level Code Fusion for GPU Concurrent Kernel Execution, **TACO(CCF-A, submitting)**
+  - K. Wu, **Y. Ouyang**, etc.
+  - GoPTX 的扩展工作，增加多种调优参数与内核匹配策略，总体性能提升至 15.8%
+    - GoPTX, K. Wu, DAC'25(CCF-A)
+- WARM: WebAssembly-based Multi-request Aggregation for Optimizing LLM Applications, **NeurIPS(CCF-A, submitting)**
+  - Y. Han, etc.
+  - 参与排版、图片布局（非作者）
+- Towards Long-Horizon Vision-Language Navigation: Platform, Benchmark and Method, **CVPR(CCF-A)**
+  - Xinshuai Song, etc.
+  - 数据筛选，代码review（非作者）
+- 3DAffordSplat: Efficient Affordance Reasoning with 3D Gaussians
+  - Zeming Wei, etc.
+  - 数据筛选、标注（非作者）
+
+## >重要项目 Important Project
+- **项目名称**：[YatCC-AI](https://yatcc-ai.com/)
+  - **角色**：项目成员 课程助教
+  - **工作内容**：AI/LLM部分构造 重要文档编写
   - **项目负责**：[Xianwei ZHANG](https://xianweiz.github.io/)
-  - **工作成果**：国家级别课程改革一等奖
+  - **工作成果**：
+    - 全球首个引入大语言模型源码优化的编译实验课程
+    - First Prize, Best Teaching Case at the 2024 China Computer Education Conference (CCEC)
+    - 2025年广东省科技创新战略专项资金项目（applying）
+    - Best Poster Award - Workshop of Data Sharing and Infrastructure 2024, December 18-20 国际级会议 第一名
+
+## >其他项目 Other Project
 - **项目名称**：基于强化学习的国产超算芯片编译器优化
   - **角色**：项目主要成员
   - **工作内容**：代码编写 参与比赛
