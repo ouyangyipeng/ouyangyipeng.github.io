@@ -16,8 +16,13 @@
   </a>
 </p>
 
-<div align="center">
-    <img src="./超算logo.png">
+<div align="center" style="display: flex; gap: 20px; align-items: center;">
+  <a style="flex: 1; text-align: center;">
+    <img src="./超算logo.png" style="max-height: 150px; width: auto; object-fit: contain;">
+  </a>
+  <a style="flex: 1; text-align: center;">
+    <img src="./lab.webp" style="max-height: 150px; width: auto; object-fit: contain;">
+  </a>
 </div>
 
 💡 𝑷𝒂𝒔𝒔𝒊𝒐𝒏𝒂𝒕𝒆 𝒂𝒃𝒐𝒖𝒕 𝒃𝒓𝒊𝒏𝒈𝒊𝒏𝒈 𝒊𝒅𝒆𝒂𝒔 𝒕𝒐 𝒍𝒊𝒇𝒆. 𝑬𝒙𝒑𝒍𝒐𝒓𝒆 𝒂𝒍𝒍 𝒐𝒇 𝒎𝒚 𝒑𝒓𝒐𝒋𝒆𝒄𝒕𝒔.
