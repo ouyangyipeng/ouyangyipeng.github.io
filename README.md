@@ -52,17 +52,17 @@
 
 ## >参与论文 Contributed Papers
 - XFuse: PTX level Code Fusion for GPU Concurrent Kernel Execution, **TACO(CCF-A, submitting)**
-  - K. Wu, **Y. Ouyang**, etc.
+  - K. Wu, **Y. Ouyang** et al.,
   - GoPTX 的扩展工作，增加多种调优参数与内核匹配策略，总体性能提升至 15.8%
-    - GoPTX, K. Wu, **DAC'25(CCF-A)**
+    - GoPTX, K. Wu et al., **DAC'25(CCF-A)**
 - WARM: WebAssembly-based Multi-request Aggregation for Optimizing LLM Applications, **NeurIPS'25(CCF-A, submitting)**
-  - Y. Han, etc.
+  - Y. Han et al.,
   - 参与排版、图片布局（非作者）
 - Towards Long-Horizon Vision-Language Navigation: Platform, Benchmark and Method, **CVPR'25(CCF-A)**
-  - Xinshuai Song, etc.
+  - Xinshuai Song et al.,
   - 数据筛选，代码review（非作者）
 - 3DAffordSplat: Efficient Affordance Reasoning with 3D Gaussians
-  - Zeming Wei, etc.
+  - Zeming Wei et al.,
   - 数据筛选、标注（非作者）
 
 ## >重要项目 Important Project
