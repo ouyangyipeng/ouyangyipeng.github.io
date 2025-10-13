@@ -87,8 +87,8 @@
 
 - **华为奖学金 HUAWEI Scholarship'24**
   - Awarded exclusively as the sole recipient in the CSE School
-- 中山大学一等奖学金 First-Class Scholarship​'24
-- 中山大学一等奖学金 First-Class Scholarship​'25
+- 中山大学一等奖学金 **First-Class Scholarship​'24**
+- 中山大学一等奖学金 **First-Class Scholarship​'25**
 - ​​First-Class Ethical Leadership Scholarship​'25
 - 中山大学程序设计-Novice Competition
   - Bronze'24
@@ -137,7 +137,8 @@
 
 ## >职务 Title
 
-- 中山大学计算机学院 学生会 主席/功能型支部书记
+- 中山大学计算机学院 第四届学生会 主席团、团支部书记
+- 中山大学计算机学院 第五届学生会 主席团、团支部书记
 - 中山大学计算机学院 2023级5班 班长
 - 世界奥林匹克竞赛 国家集训队（地理） 队员-2021/2022
 - 中山大学书法社 干部
