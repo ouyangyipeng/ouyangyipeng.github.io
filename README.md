@@ -48,13 +48,17 @@
 
 专业学习：
 - **专业**：计算机科学与技术 Computer Science and Engineering
-- **综测排名**：6/~400, ~1.5%(2023-2024)
+- **综测排名**：
+  - 6/~400, ~1.5%(2023-2024)
+  - 10/~300, ~3.3%(2024-2025)
 
 ## >参与论文 Contributed Papers
 - XFuse: PTX level Code Fusion for GPU Concurrent Kernel Execution, **TACO(CCF-A, submitting)**
   - K. Wu, **Y. Ouyang** et al.,
   - GoPTX 的扩展工作，增加多种调优参数与内核匹配策略，总体性能提升至 15.8%
     - GoPTX, K. Wu et al., **DAC'25(CCF-A)**
+- YatCC-AI: LLM Augmented HPC Workbench Prototype for Practices and Researches, **CHI(CCF-A, submitting)**
+  - K. Wu, H. Chen, Z. Zhu, Q. Lin, **Y. Ouyang** et al.,
 - WARM: WebAssembly-based Multi-request Aggregation for Optimizing LLM Applications, **NeurIPS'25(CCF-A, submitting)**
   - Y. Han et al.,
   - 参与排版、图片布局（非作者）
@@ -71,19 +75,24 @@
   - **工作内容**：AI/LLM部分构造 重要文档编写
   - **项目负责**：[Xianwei ZHANG](https://xianweiz.github.io/)
   - **工作成果**：
-    - 全球首个引入大语言模型源码优化的编译实验课程
-    - First Prize, Best Teaching Case at the 2024 China Computer Education Conference (CCEC)
+    - 全球首个全流程引入HPC+大语言模型源码优化的编译实验课程
+    - **Top Grand Prize**, 2025 China Computer Education Conference (CCEC'25)
+    - **First Prize**, 2024 China Computer Education Conference (CCEC'24)
     - 2025年广东省科技创新战略专项资金项目（applying）
-    - Best Poster Award - Workshop of Data Sharing and Infrastructure 2024, December 18-20 国际级会议 第一名
+    - **Best Poster Award** - Workshop of Data Sharing and Infrastructure 2024, December 18-20 国际级会议 第一名
     - 中山大学校级表彰课程，多次获[校级推文宣传（作为文章作者）](https://mp.weixin.qq.com/s/UiXcaOTAOure8YTmyMWJ8Q)
     - 中山大学2025年教学改革专项项目
 
 ## >荣誉和奖项 Awards
 
-- **华为奖学金 HUAWEI Award'24**
-  - Awarded exclusively as the sole recipient in the college
-- 中山大学一等奖学金 '24
-- 中山大学程序设计Novice赛 Silver'25 Bronze'24
+- **华为奖学金 HUAWEI Scholarship'24**
+  - Awarded exclusively as the sole recipient in the CSE School
+- 中山大学一等奖学金 First-Class Scholarship​'24
+- 中山大学一等奖学金 First-Class Scholarship​'25
+- ​​First-Class Ethical Leadership Scholarship​'25
+- 中山大学程序设计-Novice Competition
+  - Bronze'24
+  - Silver'25
 - Best Poster Award - Workshop of Data Sharing and Infrastructure(China,Japan,Korea) 2024, December 18-20 国际级会议 YatCC团队获奖
 - 全国大学生数学竞赛 省级三等奖
 - 中山大学W4terCTF网络安全赛 Excellence Award​​
@@ -99,6 +108,10 @@
   - **工作内容**：项目计划 主体实现
   - **项目级别**：省级大创项目
   - **项目负责**：[Yipeng OUYANG](https://ouyangyipeng.github.io/)
+- **项目名称**：OYOS (Rust-based Operating System, x86-64)
+  - **角色**：作者
+  - **工作内容**：系统实现
+  - **项目级别**：课程项目
 - **项目名称**：基于AI大模型和超算平台的法律档信息全流程自动化识别分析器
   - **角色**：合作负责人
   - **工作内容**：项目计划 主体实现
