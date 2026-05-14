@@ -1,6 +1,10 @@
 ---
 import { getCollection } from "astro:content";
-import BlogLayout from "../../../layouts/BlogLayout.astro";
+import { getSiteConfig } from "../../../config";
+import { ui } from "../../../i18n/ui";
+import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
+import "../../../styles/global.css";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -11,17 +15,65 @@ export async function getStaticPaths() {
 }
 
 const { post, lang } = Astro.props;
+const siteConfig = getSiteConfig(lang);
+const t = ui[lang];
 const { Content } = await post.render();
 ---
 
-<BlogLayout
-  title={post.data.title}
-  description={post.data.description}
-  pubDate={post.data.pubDate}
-  updatedDate={post.data.updatedDate}
-  tags={post.data.tags}
-  lang={lang}
-  backHref="/zh/blog/"
->
-  <Content />
-</BlogLayout>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={post.data.description} />
+    <title>{post.data.title} — {siteConfig.personal.name}</title>
+  </head>
+  <body class="min-h-screen bg-white">
+    <Header lang={lang} />
+
+    <main class="max-w-3xl mx-auto px-6 pt-32 pb-16">
+      <article>
+        <!-- Article header -->
+        <header class="mb-10 border-b border-gray-200 pb-8">
+          <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 leading-tight">
+            {post.data.title}
+          </h1>
+          <div class="mt-4 flex items-center gap-3 text-sm text-gray-400">
+            <time datetime={post.data.pubDate.toISOString()}>
+              {post.data.pubDate.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
+            </time>
+            {post.data.updatedDate && (
+              <span>
+                · 更新于 {post.data.updatedDate.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
+              </span>
+            )}
+          </div>
+          {post.data.tags && post.data.tags.length > 0 && (
+            <div class="mt-4 flex flex-wrap gap-2">
+              {post.data.tags.map((tag: string) => (
+                <span class="px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-500">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </header>
+
+        <!-- Article content -->
+        <div class="prose" style={`--accent-color: ${siteConfig.personal.accentColor}`}>
+          <Content />
+        </div>
+
+        <!-- Back link -->
+        <div class="mt-16 pt-8 border-t border-gray-200">
+          <a href="/zh/blog/" class="text-sm font-medium transition-colors" style={`color: ${siteConfig.personal.accentColor}`}>
+            {t.blogBack}
+          </a>
+        </div>
+      </article>
+    </main>
+
+    <Footer lang={lang} />
+  </body>
+</html>

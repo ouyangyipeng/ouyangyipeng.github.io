@@ -14,73 +14,79 @@ const t = ui[lang];
 
 <section id="nexa" class="py-16 md:py-24 bg-purple-50">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-12">
-      {t.sectionNexa}
+    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-8">
+      {t.sectionNexaProject}
     </h2>
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
-      <!-- Left: Intro + buttons -->
-      <div class="lg:col-span-1">
-        <p class="text-base sm:text-lg leading-7 text-gray-600 mb-6">
-          {siteConfig.nexa.intro}
-        </p>
-        <div class="flex flex-col gap-3">
-          {siteConfig.nexa.github && (
-            <a
-              href={siteConfig.nexa.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
-              style={`background-color: ${siteConfig.personal.accentColor}`}
-            >
-              GitHub →
-            </a>
-          )}
-          {siteConfig.nexa.paper && (
-            <a
-              href={siteConfig.nexa.paper}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors"
-              style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}
-            >
-              Paper →
-            </a>
-          )}
-          {siteConfig.nexa.docs && (
-            <a
-              href={siteConfig.nexa.docs}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors"
-              style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}
-            >
-              Docs →
-            </a>
-          )}
-        </div>
-      </div>
 
-      <!-- Right: Ecosystem links grid -->
-      <div class="lg:col-span-3">
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {siteConfig.nexa.links.map((link) => (
-            <a
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group p-4 rounded-xl bg-white border border-purple-200 transition-all duration-300 hover:shadow-lg hover:border-purple-300"
-            >
-              <div class="text-2xl mb-2">{link.icon || "🔗"}</div>
-              <h3 class="text-base font-bold text-gray-900 group-hover:text-purple-700 transition-colors">
-                {link.name}
-              </h3>
-              <p class="text-sm text-gray-600 mt-1">
-                {link.description}
-              </p>
-            </a>
-          ))}
+    <p class="text-base sm:text-lg leading-7 text-gray-600 mb-6">
+      {siteConfig.nexa.intro}
+    </p>
+
+    <!-- Action buttons -->
+    <div class="flex flex-wrap gap-3 mb-8">
+      {siteConfig.nexa.homepage && (
+        <a
+          href={siteConfig.nexa.homepage}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
+          style={`background-color: ${siteConfig.personal.accentColor}`}
+        >
+          Homepage →
+        </a>
+      )}
+      {siteConfig.nexa.github && (
+        <a
+          href={siteConfig.nexa.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors"
+          style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}
+        >
+          GitHub →
+        </a>
+      )}
+      {siteConfig.nexa.paper && (
+        <a
+          href={siteConfig.nexa.paper}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors"
+          style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}
+        >
+          Paper →
+        </a>
+      )}
+      {siteConfig.nexa.docs && (
+        <a
+          href={siteConfig.nexa.docs}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors"
+          style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}
+        >
+          Docs →
+        </a>
+      )}
+    </div>
+
+    <!-- Ecosystem links as simple list -->
+    <div class="space-y-3">
+      {siteConfig.nexa.links.map((link) => (
+        <div class="flex items-center gap-3">
+          <span class="text-lg">{link.icon || "🔗"}</span>
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-sm font-bold transition-colors"
+            style={`color: ${siteConfig.personal.accentColor}`}
+          >
+            {link.name}
+          </a>
+          <span class="text-sm text-gray-500">— {link.description}</span>
         </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>

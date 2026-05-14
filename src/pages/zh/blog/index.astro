@@ -2,6 +2,8 @@
 import { getCollection } from "astro:content";
 import { getSiteConfig } from "../../../config";
 import { ui } from "../../../i18n/ui";
+import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
 import "../../../styles/global.css";
 
 const lang = "zh";
@@ -20,79 +22,56 @@ const sortedPosts = allPosts.sort(
     <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={`${siteConfig.personal.name} 的博客 — ${t.blogDesc}`} />
-    <title>博客 — {siteConfig.personal.name}</title>
+    <meta name="description" content={`${siteConfig.personal.name} 的博客`} />
+    <title>{t.blogTitle} — {siteConfig.personal.name}</title>
   </head>
   <body class="min-h-screen bg-white">
-    <!-- Header -->
-    <header class="border-b border-gray-200 bg-white sticky top-0 z-50">
-      <nav class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="/zh/" class="text-lg font-bold text-gray-900 hover:text-gray-700 transition-colors">
-          ← {siteConfig.personal.name}
-        </a>
-        <div class="flex items-center gap-4">
-          <span class="text-base font-medium text-gray-600">{t.blogTitle}</span>
-          <a href="/blog/" class="px-2 py-1 rounded text-xs font-bold border transition-colors" style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}>
-            EN
-          </a>
-        </div>
-      </nav>
-    </header>
+    <Header lang={lang} />
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-      <div class="mb-12">
-        <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">{t.blogTitle}</h1>
-        <p class="text-lg sm:text-xl text-gray-600">
-          {t.blogDesc}
-        </p>
+    <main class="max-w-3xl mx-auto px-6 pt-32 pb-16">
+      <!-- Blog header -->
+      <div class="mb-16 border-b border-gray-200 pb-8">
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900">{t.blogTitle}</h1>
+        <p class="mt-4 text-lg text-gray-500">{t.blogDesc}</p>
       </div>
 
-      <div class="space-y-8">
+      <!-- Posts timeline -->
+      <div class="space-y-12">
         {sortedPosts.map((post) => (
-          <a
-            href={`/zh/blog/${post.slug}`}
-            class="group block p-6 sm:p-8 bg-gray-50 rounded-xl border border-gray-200 transition-all duration-300 hover:bg-white hover:shadow-xl hover:border-gray-300 hover:-translate-y-1"
-          >
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
-              <h2 class="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-gray-800">
+          <article class="group">
+            <a href={`/zh/blog/${post.slug}`} class="block">
+              <div class="flex items-baseline gap-4 mb-2">
+                <time class="text-sm font-medium text-gray-400 tabular-nums" datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString("zh-CN", { year: "numeric", month: "short", day: "numeric" })}
+                </time>
+              </div>
+              <h2 class="text-2xl font-bold text-gray-900 group-hover:text-gray-600 transition-colors leading-snug">
                 {post.data.title}
               </h2>
-              <time class="text-sm text-gray-500" datetime={post.data.pubDate.toISOString()}>
-                {post.data.pubDate.toLocaleDateString("zh-CN", { year: "numeric", month: "short", day: "numeric" })}
-              </time>
-            </div>
-
-            <p class="text-base sm:text-lg text-gray-600 leading-relaxed mb-4">
-              {post.data.description}
-            </p>
-
-            {post.data.tags && post.data.tags.length > 0 && (
-              <div class="flex flex-wrap gap-2">
-                {post.data.tags.map((tag: string) => (
-                  <span class="px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-gray-200 text-gray-700">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </a>
+              <p class="mt-2 text-gray-500 leading-relaxed">
+                {post.data.description}
+              </p>
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="mt-3 flex flex-wrap gap-2">
+                  {post.data.tags.map((tag: string) => (
+                    <span class="px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-500">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </a>
+          </article>
         ))}
       </div>
 
       {sortedPosts.length === 0 && (
         <div class="text-center py-16">
-          <p class="text-lg text-gray-500">暂无文章，敬请期待！</p>
+          <p class="text-lg text-gray-400">暂无文章，敬请期待。</p>
         </div>
       )}
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-gray-200 bg-gray-50 mt-16">
-      <div class="max-w-4xl mx-auto px-6 py-8 text-center">
-        <p class="text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} {siteConfig.personal.name}. {t.footerBuilt}
-        </p>
-      </div>
-    </footer>
+    <Footer lang={lang} />
   </body>
 </html>

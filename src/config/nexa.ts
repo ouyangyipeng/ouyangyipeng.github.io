@@ -2,6 +2,7 @@ import type { Lang, NexaConfig } from "./types";
 
 const configs: Record<Lang, NexaConfig> = {
   en: {
+    homepage: "https://www.nexa-lang.com",
     intro:
       "Nexa is the first Harness Native Agent Language — where agent safety is enforced by the compiler, not by runtime frameworks. Write flows, not glue code. 16+ features, 1,500+ tests, Rust AVM runtime with WASM sandboxing.",
     links: [
@@ -47,6 +48,7 @@ const configs: Record<Lang, NexaConfig> = {
     docs: "https://docs.nexa-lang.com/en/",
   },
   zh: {
+    homepage: "https://www.nexa-lang.com",
     intro:
       "Nexa 是首个 Harness Native Agent Language — 由编译器而非运行时框架强制保障 Agent 安全。写流程，不写胶水代码。16+ 特性，1,500+ 测试，Rust AVM 运行时 + WASM 沙箱。",
     links: [

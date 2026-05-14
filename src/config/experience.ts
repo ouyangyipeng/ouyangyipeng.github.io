@@ -8,9 +8,9 @@ const configs: Record<Lang, Experience[]> = {
       dateRange: "Oct 2023 - Present",
       link: "https://xianweiz.github.io/#pple",
       bullets: [
-        "Research on AI Integrated Compilers and GPU kernel optimization",
+        "Research on Agentic Systems and SysML",
         "Contributing to XFuse (TACO, CCF-A submitting) and GoPTX (DAC'25, CCF-A)",
-        "Working under Prof. Xianwei ZHANG on compiler optimization and LLM-driven compilation",
+        "Working under Prof. Xianwei ZHANG on agent compilation and LLM-driven systems",
       ],
     },
     {
@@ -32,9 +32,9 @@ const configs: Record<Lang, Experience[]> = {
       dateRange: "2023.10 - 至今",
       link: "https://xianweiz.github.io/#pple",
       bullets: [
-        "研究 AI 集成编译器与 GPU 内核优化",
+        "研究 Agentic Systems 与 SysML",
         "参与 XFuse（TACO, CCF-A 投稿中）和 GoPTX（DAC'25, CCF-A 已录用）",
-        "在张献伟教授指导下研究编译器优化与 LLM 驱动编译",
+        "在张献伟教授指导下研究 Agent 编译与 LLM 驱动系统",
       ],
     },
     {

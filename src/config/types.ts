@@ -84,6 +84,7 @@ export interface NexaLink {
 export interface NexaConfig {
   intro: string;
   links: NexaLink[];
+  homepage?: string;
   github?: string;
   paper?: string;
   docs?: string;
@@ -112,7 +113,7 @@ export interface I18nStrings {
   heroGreeting: string;
   heroIm: string;
   sectionAbout: string;
-  sectionNexa: string;
+  sectionNexaProject: string;
   sectionResearch: string;
   sectionExperience: string;
   sectionProjects: string;

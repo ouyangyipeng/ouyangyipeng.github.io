@@ -70,17 +70,6 @@ const configs: Record<Lang, Paper[]> = {
       myRole: "Non-author contributor",
       contribution: "Layout and figure design",
     },
-    // GoPTX (accepted)
-    {
-      title: "GoPTX: PTX Level Code Fusion for GPU Concurrent Kernel Execution",
-      venue: "DAC'25",
-      level: "CCF-A",
-      status: "accepted",
-      authors: "K. Wu et al.",
-      myRole: "Co-author",
-      contribution: "Predecessor work to XFuse",
-      link: "https://doi.org/10.5281/zenodo.19994263",
-    },
     // CVPR'25 (accepted)
     {
       title: "Towards Long-Horizon Vision-Language Navigation: Platform, Benchmark and Method",
@@ -169,17 +158,6 @@ const configs: Record<Lang, Paper[]> = {
       authors: "Y. Han et al.",
       myRole: "非作者贡献者",
       contribution: "参与排版、图片布局",
-    },
-    // GoPTX
-    {
-      title: "GoPTX: PTX Level Code Fusion for GPU Concurrent Kernel Execution",
-      venue: "DAC'25",
-      level: "CCF-A",
-      status: "accepted",
-      authors: "K. Wu et al.",
-      myRole: "共同作者",
-      contribution: "XFuse 的前序工作",
-      link: "https://doi.org/10.5281/zenodo.19994263",
     },
     // CVPR'25
     {
