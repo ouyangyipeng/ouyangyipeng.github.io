@@ -1,11 +1,14 @@
 // Type definitions for site configuration
 
+export type Lang = "en" | "zh";
+
 export interface SocialLinks {
   email: string;
   linkedin?: string;
   twitter?: string;
   github: string;
   website?: string;
+  orcid?: string;
 }
 
 export interface PersonalConfig {
@@ -59,6 +62,9 @@ export interface Paper {
   myRole?: string;
   contribution?: string;
   link?: string;
+  dois?: string[];
+  creditRoles?: string[];
+  pinned?: boolean;
 }
 
 export interface Award {
@@ -92,4 +98,35 @@ export interface SiteConfig {
   research: Paper[];
   awards: Award[];
   nexa: NexaConfig;
+}
+
+export interface I18nStrings {
+  navAbout: string;
+  navNexa: string;
+  navResearch: string;
+  navExperience: string;
+  navProjects: string;
+  navEducation: string;
+  navAwards: string;
+  navBlog: string;
+  heroGreeting: string;
+  heroIm: string;
+  sectionAbout: string;
+  sectionNexa: string;
+  sectionResearch: string;
+  sectionExperience: string;
+  sectionProjects: string;
+  sectionEducation: string;
+  sectionAwards: string;
+  blogTitle: string;
+  blogDesc: string;
+  blogBack: string;
+  footerBuilt: string;
+  langSwitchLabel: string;
+  statusAccepted: string;
+  statusSubmitting: string;
+  statusPreprint: string;
+  roleFirstAuthor: string;
+  doiLabel: string;
+  creditLabel: string;
 }

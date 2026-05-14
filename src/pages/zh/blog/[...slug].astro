@@ -1,12 +1,12 @@
 ---
 import { getCollection } from "astro:content";
-import BlogLayout from "../../layouts/BlogLayout.astro";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
   return posts.map((post) => ({
     params: { slug: post.slug },
-    props: { post, lang: "en" },
+    props: { post, lang: "zh" },
   }));
 }
 
@@ -21,7 +21,7 @@ const { Content } = await post.render();
   updatedDate={post.data.updatedDate}
   tags={post.data.tags}
   lang={lang}
-  backHref="/blog/"
+  backHref="/zh/blog/"
 >
   <Content />
 </BlogLayout>

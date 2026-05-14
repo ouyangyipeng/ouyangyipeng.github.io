@@ -1,5 +1,7 @@
 ---
-import { siteConfig } from "../config";
+import { getSiteConfig } from "../config";
+import { ui } from "../i18n/ui";
+import type { Lang } from "../config/types";
 import "../styles/global.css";
 
 interface Props {
@@ -8,35 +10,44 @@ interface Props {
   pubDate?: Date;
   updatedDate?: Date;
   tags?: string[];
+  lang?: Lang;
+  backHref?: string;
 }
 
-const { title, description, pubDate, updatedDate, tags } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  tags,
+  lang = "en",
+  backHref = "/blog/",
+} = Astro.props;
+
+const siteConfig = getSiteConfig(lang);
+const t = ui[lang];
+const locale = lang === "zh" ? "zh-CN" : "en-US";
+const htmlLang = lang === "zh" ? "zh-CN" : "en";
 ---
 
-<html lang="en">
+<html lang={htmlLang}>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description || siteConfig.personal.description} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
-    <title>{title} — {siteConfig.personal.name} Blog</title>
+    <title>{title} — {siteConfig.personal.name} {t.blogTitle}</title>
   </head>
   <body class="min-h-screen bg-white">
     <!-- Header nav for blog -->
     <header class="border-b border-gray-200 bg-white sticky top-0 z-50">
       <nav class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="/" class="text-lg font-bold text-gray-900 hover:text-gray-700 transition-colors">
+        <a href={lang === "en" ? "/" : "/zh/"} class="text-lg font-bold text-gray-900 hover:text-gray-700 transition-colors">
           ← {siteConfig.personal.name}
         </a>
-        <a href="/blog/" class="text-base font-medium text-gray-600 hover:text-gray-900 transition-colors">
-          Blog
+        <a href={backHref} class="text-base font-medium text-gray-600 hover:text-gray-900 transition-colors">
+          {t.blogTitle}
         </a>
       </nav>
     </header>
@@ -52,11 +63,11 @@ const { title, description, pubDate, updatedDate, tags } = Astro.props;
           {pubDate && (
             <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
               <time datetime={pubDate.toISOString()}>
-                {pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                {pubDate.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}
               </time>
               {updatedDate && (
                 <span class="text-gray-400">
-                  (Updated: {updatedDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })})
+                  (Updated: {updatedDate.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })})
                 </span>
               )}
             </div>
@@ -79,21 +90,21 @@ const { title, description, pubDate, updatedDate, tags } = Astro.props;
         <div class="prose" style={`--accent-color: ${siteConfig.personal.accentColor}`}>
           <slot />
         </div>
-      </article>
 
-      <!-- Back link -->
-      <div class="mt-12 pt-8 border-t border-gray-200">
-        <a href="/blog/" class="inline-flex items-center gap-2 font-medium transition-colors duration-200" style={`color: ${siteConfig.personal.accentColor}`}>
-          ← Back to all posts
-        </a>
-      </div>
+        <!-- Back link -->
+        <div class="mt-12 pt-8 border-t border-gray-200">
+          <a href={backHref} class="text-base font-medium transition-colors" style={`color: ${siteConfig.personal.accentColor}`}>
+            {t.blogBack}
+          </a>
+        </div>
+      </article>
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-gray-200 bg-gray-50 mt-16">
       <div class="max-w-4xl mx-auto px-6 py-8 text-center">
         <p class="text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} {siteConfig.personal.name}. Built with Astro & Tailwind CSS.
+          &copy; {new Date().getFullYear()} {siteConfig.personal.name}. {t.footerBuilt}
         </p>
       </div>
     </footer>

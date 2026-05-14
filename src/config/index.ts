@@ -1,20 +1,22 @@
-import type { SiteConfig } from "./types";
-import { personal } from "./personal";
-import { about } from "./about";
-import { projects } from "./projects";
-import { experience } from "./experience";
-import { education } from "./education";
-import { research } from "./research";
-import { awards } from "./awards";
-import { nexa } from "./nexa";
+import type { Lang, SiteConfig } from "./types";
+import { getPersonal } from "./personal";
+import { getAbout } from "./about";
+import { getProjects } from "./projects";
+import { getExperience } from "./experience";
+import { getEducation } from "./education";
+import { getResearch } from "./research";
+import { getAwards } from "./awards";
+import { getNexa } from "./nexa";
 
-export const siteConfig: SiteConfig = {
-  personal,
-  about,
-  projects,
-  experience,
-  education,
-  research,
-  awards,
-  nexa,
-};
+export function getSiteConfig(lang: Lang): SiteConfig {
+  return {
+    personal: getPersonal(lang),
+    about: getAbout(lang),
+    projects: getProjects(lang),
+    experience: getExperience(lang),
+    education: getEducation(lang),
+    research: getResearch(lang),
+    awards: getAwards(lang),
+    nexa: getNexa(lang),
+  };
+}

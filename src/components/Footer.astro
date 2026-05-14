@@ -1,27 +1,32 @@
 ---
-import { siteConfig } from "../config";
+import { getSiteConfig } from "../config";
+import { ui } from "../i18n/ui";
+import type { Lang } from "../config/types";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const siteConfig = getSiteConfig(lang);
+const t = ui[lang];
+const altLang: Lang = lang === "en" ? "zh" : "en";
+const altPath = altLang === "en" ? "/" : "/zh/";
 ---
 
-<footer class="relative bg-gray-50 border-t border-gray-200">
-  <div class="mx-auto max-w-6xl px-6 py-12 lg:px-8">
-    <div
-      class="flex flex-col md:flex-row md:items-center md:justify-between gap-8"
-    >
-      <div class="flex flex-col gap-4">
-        <h3 class="text-2xl font-bold text-gray-800">
-          {siteConfig.personal.name}
-        </h3>
-        <p class="text-base text-gray-600">
-          {siteConfig.personal.title}
-        </p>
-        <div class="flex gap-x-6">
+<footer class="border-t border-gray-200 bg-gray-50 py-12">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Left: Name & title -->
+      <div>
+        <h3 class="text-lg font-bold text-gray-900">{siteConfig.personal.name}</h3>
+        <p class="text-sm text-gray-600 mt-1">{siteConfig.personal.title}</p>
+        <div class="flex gap-x-4 mt-4">
           <a
             href={`mailto:${siteConfig.personal.social.email}`}
-            aria-label="Email"
-            class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
-            style={`--accent-color: ${siteConfig.personal.accentColor}`}
+            class="text-gray-500 hover:text-gray-700 transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
               <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path>
               <path d="M3 7l9 6l9 -6"></path>
@@ -32,56 +37,66 @@ import { siteConfig } from "../config";
               href={siteConfig.personal.social.github}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="GitHub"
-              class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
-              style={`--accent-color: ${siteConfig.personal.accentColor}`}
+              class="text-gray-500 hover:text-gray-700 transition-colors"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.928-.399 2.929-.399 1.001 0 2.007.134 2.929.399 3.293-1.552 3.301-1.23 3.301-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-3.807 5.624-5.479 5.919.43.372.823 1.102.823 2.222v3.293c0 .719.481 1.278 1.229 1.078 4.771-1.586 8.207-5.086 8.207-11.388 0-6.627-5.373-12-12-12z"/>
               </svg>
             </a>
           )}
-          {siteConfig.personal.social.website && (
+          {siteConfig.personal.social.orcid && (
             <a
-              href={siteConfig.personal.social.website}
+              href={siteConfig.personal.social.orcid}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Website"
-              class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
-              style={`--accent-color: ${siteConfig.personal.accentColor}`}
+              class="text-gray-500 hover:text-gray-700 transition-colors"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
-                <path d="M3.6 9h16.8"></path>
-                <path d="M3.6 15h16.8"></path>
-                <path d="M12 3a15 15 0 0 0 4 9a15 15 0 0 1 -4 9a15 15 0 0 1 -4 -9a15 15 0 0 0 4 -9"></path>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+                <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.411c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.736 3.861h1.473v10.159H6.633V8.272zm3.947 0h3.947c3.736 0 5.473 2.625 5.473 5.078 0 2.625-1.847 5.078-5.473 5.078h-3.947V8.272zm1.473 1.578v7.922h2.474c2.105 0 3.473-1.578 3.473-3.947 0-2.263-1.368-3.947-3.473-3.947h-2.474z"/>
               </svg>
             </a>
           )}
         </div>
       </div>
 
-      <div class="flex flex-col gap-4 text-right">
-        <a href="/blog/" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">
-          Blog
+      <!-- Middle: Links -->
+      <div>
+        <h4 class="text-sm font-bold text-gray-900 mb-3">Links</h4>
+        <ul class="space-y-2">
+          <li>
+            <a href={lang === "en" ? "/blog/" : "/zh/blog/"} class="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+              {t.navBlog}
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/Nexa-Language/Nexa" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+              Nexa GitHub
+            </a>
+          </li>
+          <li>
+            <a href="https://docs.nexa-lang.com/en/" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+              Nexa Docs
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right: Language switch -->
+      <div>
+        <h4 class="text-sm font-bold text-gray-900 mb-3">Language</h4>
+        <a
+          href={altPath}
+          class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors duration-300"
+          style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}
+        >
+          {t.langSwitchLabel}
         </a>
-        {siteConfig.nexa.github && (
-          <a href={siteConfig.nexa.github} target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">
-            Nexa GitHub
-          </a>
-        )}
-        {siteConfig.nexa.docs && (
-          <a href={siteConfig.nexa.docs} target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">
-            Nexa Docs
-          </a>
-        )}
       </div>
     </div>
 
     <div class="mt-8 pt-8 border-t border-gray-200 text-center">
       <p class="text-sm text-gray-500">
-        &copy; {new Date().getFullYear()} {siteConfig.personal.name}. Built with Astro & Tailwind CSS.
+        &copy; {new Date().getFullYear()} {siteConfig.personal.name}. {t.footerBuilt}
       </p>
     </div>
   </div>

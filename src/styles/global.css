@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "@fontsource/ibm-plex-mono/latin-400";
+@import "@fontsource/ibm-plex-mono/latin-500";
+@import "@fontsource/ibm-plex-mono/latin-600";
+@import "@fontsource/ibm-plex-mono/latin-700";
 
 body {
   font-family: 'IBM Plex Mono', monospace;

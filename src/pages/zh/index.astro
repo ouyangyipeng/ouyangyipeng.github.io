@@ -1,0 +1,39 @@
+---
+import Header from "../../components/Header.astro";
+import Hero from "../../components/Hero.astro";
+import About from "../../components/About.astro";
+import NexaEcosystem from "../../components/NexaEcosystem.astro";
+import Research from "../../components/Research.astro";
+import Experience from "../../components/Experience.astro";
+import Projects from "../../components/Projects.astro";
+import Education from "../../components/Education.astro";
+import Awards from "../../components/Awards.astro";
+import Footer from "../../components/Footer.astro";
+import "../../styles/global.css";
+
+const lang = "zh";
+---
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>欧阳逸鹏 - 计算机科学学生 · AI 集成编译器 · 具身智能</title>
+  </head>
+  <body>
+    <Header lang={lang} />
+    <section>
+      <Hero lang={lang} />
+      <About lang={lang} />
+      <NexaEcosystem lang={lang} />
+      <Research lang={lang} />
+      <Experience lang={lang} />
+      <Projects lang={lang} />
+      <Education lang={lang} />
+      <Awards lang={lang} />
+    </section>
+    <Footer lang={lang} />
+  </body>
+</html>

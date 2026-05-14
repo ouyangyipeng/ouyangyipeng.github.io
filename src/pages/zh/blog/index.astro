@@ -1,10 +1,10 @@
 ---
 import { getCollection } from "astro:content";
-import { getSiteConfig } from "../../config";
-import { ui } from "../../i18n/ui";
-import "../../styles/global.css";
+import { getSiteConfig } from "../../../config";
+import { ui } from "../../../i18n/ui";
+import "../../../styles/global.css";
 
-const lang = "en";
+const lang = "zh";
 const siteConfig = getSiteConfig(lang);
 const t = ui[lang];
 
@@ -14,26 +14,26 @@ const sortedPosts = allPosts.sort(
 );
 ---
 
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={`Blog by ${siteConfig.personal.name} — ${t.blogDesc}`} />
-    <title>Blog — {siteConfig.personal.name}</title>
+    <meta name="description" content={`${siteConfig.personal.name} 的博客 — ${t.blogDesc}`} />
+    <title>博客 — {siteConfig.personal.name}</title>
   </head>
   <body class="min-h-screen bg-white">
     <!-- Header -->
     <header class="border-b border-gray-200 bg-white sticky top-0 z-50">
       <nav class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="/" class="text-lg font-bold text-gray-900 hover:text-gray-700 transition-colors">
+        <a href="/zh/" class="text-lg font-bold text-gray-900 hover:text-gray-700 transition-colors">
           ← {siteConfig.personal.name}
         </a>
         <div class="flex items-center gap-4">
           <span class="text-base font-medium text-gray-600">{t.blogTitle}</span>
-          <a href="/zh/blog/" class="px-2 py-1 rounded text-xs font-bold border transition-colors" style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}>
-            中文
+          <a href="/blog/" class="px-2 py-1 rounded text-xs font-bold border transition-colors" style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}>
+            EN
           </a>
         </div>
       </nav>
@@ -50,7 +50,7 @@ const sortedPosts = allPosts.sort(
       <div class="space-y-8">
         {sortedPosts.map((post) => (
           <a
-            href={`/blog/${post.slug}`}
+            href={`/zh/blog/${post.slug}`}
             class="group block p-6 sm:p-8 bg-gray-50 rounded-xl border border-gray-200 transition-all duration-300 hover:bg-white hover:shadow-xl hover:border-gray-300 hover:-translate-y-1"
           >
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
@@ -58,7 +58,7 @@ const sortedPosts = allPosts.sort(
                 {post.data.title}
               </h2>
               <time class="text-sm text-gray-500" datetime={post.data.pubDate.toISOString()}>
-                {post.data.pubDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
+                {post.data.pubDate.toLocaleDateString("zh-CN", { year: "numeric", month: "short", day: "numeric" })}
               </time>
             </div>
 
@@ -81,7 +81,7 @@ const sortedPosts = allPosts.sort(
 
       {sortedPosts.length === 0 && (
         <div class="text-center py-16">
-          <p class="text-lg text-gray-500">No posts yet. Stay tuned!</p>
+          <p class="text-lg text-gray-500">暂无文章，敬请期待！</p>
         </div>
       )}
     </main>

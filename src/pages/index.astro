@@ -9,8 +9,9 @@ import Projects from "../components/Projects.astro";
 import Education from "../components/Education.astro";
 import Awards from "../components/Awards.astro";
 import Footer from "../components/Footer.astro";
-import { siteConfig } from "../config";
 import "../styles/global.css";
+
+const lang = "en";
 ---
 
 <html lang="en">
@@ -19,27 +20,20 @@ import "../styles/global.css";
     <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={siteConfig.personal.description} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
-    <title>{siteConfig.personal.name} - {siteConfig.personal.title}</title>
+    <title>Fernandez Owen - CS Student · AI Integrated Compilers · Embodied Intelligence</title>
   </head>
   <body>
-    <Header />
+    <Header lang={lang} />
     <section>
-      <Hero />
-      <About />
-      <NexaEcosystem />
-      <Research />
-      <Experience />
-      <Projects />
-      <Education />
-      <Awards />
+      <Hero lang={lang} />
+      <About lang={lang} />
+      <NexaEcosystem lang={lang} />
+      <Research lang={lang} />
+      <Experience lang={lang} />
+      <Projects lang={lang} />
+      <Education lang={lang} />
+      <Awards lang={lang} />
     </section>
-    <Footer />
+    <Footer lang={lang} />
   </body>
 </html>

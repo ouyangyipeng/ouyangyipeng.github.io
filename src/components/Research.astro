@@ -1,98 +1,175 @@
 ---
-import { siteConfig } from "../config";
-const hasResearch = siteConfig.research && siteConfig.research.length > 0;
+import { getSiteConfig } from "../config";
+import { ui } from "../i18n/ui";
+import type { Lang } from "../config/types";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const siteConfig = getSiteConfig(lang);
+const t = ui[lang];
+
+const pinnedPapers = siteConfig.research.filter((p) => p.pinned);
+const otherPapers = siteConfig.research.filter((p) => !p.pinned);
 ---
 
-{
-  hasResearch && (
-    <section id="research" class="p-8 sm:p-12 md:p-16 lg:p-24">
-      <div>
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-          <div class="lg:col-span-4">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl xl:text-7xl font-bold text-gray-900">
-              Research
-            </h2>
+<section id="research" class="py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-12">
+      {t.sectionResearch}
+    </h2>
+
+    <!-- Pinned papers -->
+    {pinnedPapers.length > 0 && (
+      <div class="mb-12">
+        <div class="space-y-8">
+          {pinnedPapers.map((paper) => (
             <div
-              class="w-[75px] h-[5px] mt-2 rounded-full"
-              style={`background-color: ${siteConfig.personal.accentColor}`}
-            />
-          </div>
-
-          <div class="lg:col-span-8">
-            <div class="space-y-6">
-              {siteConfig.research.map((paper) => {
-                const statusColor = paper.status === "accepted"
-                  ? "bg-green-100 text-green-800"
-                  : paper.status === "submitting"
-                    ? "bg-yellow-100 text-yellow-800"
-                    : "bg-gray-100 text-gray-800";
-
-                const statusLabel = paper.status === "accepted"
-                  ? "✓ Accepted"
-                  : paper.status === "submitting"
-                    ? "⟳ Submitting"
-                    : paper.status || "Preprint";
-
-                return (
-                  <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-5 md:p-6 hover:shadow-md transition-shadow duration-300">
-                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-                      <div>
-                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900">
-                          {paper.title}
-                        </h3>
-                        <p class="text-base sm:text-lg mt-1" style={`color: ${siteConfig.personal.accentColor}`}>
-                          {paper.venue}
-                          {paper.level && (
-                            <span class="ml-2 text-sm font-medium text-gray-500">
-                              ({paper.level})
-                            </span>
-                          )}
-                        </p>
-                      </div>
-                      <span class={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${statusColor}`}>
-                        {statusLabel}
-                      </span>
-                    </div>
-
-                    <p class="text-sm sm:text-base text-gray-600 mb-2">
-                      <span class="font-medium text-gray-700">Authors:</span> {paper.authors}
-                    </p>
-
-                    {paper.myRole && (
-                      <p class="text-sm sm:text-base text-gray-600 mb-2">
-                        <span class="font-medium text-gray-700">My Role:</span> {paper.myRole}
-                      </p>
-                    )}
-
-                    {paper.contribution && (
-                      <p class="text-sm sm:text-base text-gray-600">
-                        <span class="font-medium text-gray-700">Contribution:</span> {paper.contribution}
-                      </p>
-                    )}
-
-                    {paper.link && (
-                      <div class="mt-3">
-                        <a
-                          href={paper.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="inline-flex items-center gap-1 text-sm font-medium transition-colors duration-200"
-                          style={`color: ${siteConfig.personal.accentColor}`}
-                        >
-                          View Paper
-                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7V17" />
-                          </svg>
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+              class="p-6 sm:p-8 rounded-xl border-2 bg-white"
+              style={`border-color: ${siteConfig.personal.accentColor}`}
+            >
+              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">
+                  {paper.title}
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  {paper.status && (
+                    <span
+                      class={`px-3 py-1 rounded-full text-xs font-bold ${
+                        paper.status === "accepted"
+                          ? "bg-green-100 text-green-800"
+                          : paper.status === "submitting"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-purple-100 text-purple-800"
+                      }`}
+                    >
+                      {paper.status === "accepted"
+                        ? t.statusAccepted
+                        : paper.status === "submitting"
+                        ? t.statusSubmitting
+                        : t.statusPreprint}
+                    </span>
+                  )}
+                  {paper.level && (
+                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                      {paper.level}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <p class="text-sm text-gray-500 mb-2">
+                {paper.venue}
+              </p>
+              <p class="text-sm text-gray-600 mb-3">
+                {paper.authors}
+              </p>
+              {paper.myRole && (
+                <p class="text-sm font-medium mb-2" style={`color: ${siteConfig.personal.accentColor}`}>
+                  {paper.myRole}
+                </p>
+              )}
+              {paper.creditRoles && paper.creditRoles.length > 0 && (
+                <p class="text-sm text-gray-500 mb-2">
+                  <span class="font-medium">{t.creditLabel}:</span> {paper.creditRoles.join(", ")}
+                </p>
+              )}
+              {paper.dois && paper.dois.length > 0 && (
+                <div class="flex flex-wrap gap-2 mt-2">
+                  {paper.dois.map((doi) => (
+                    <a
+                      href={`https://doi.org/${doi}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+                    >
+                      {t.doiLabel}: {doi}
+                    </a>
+                  ))}
+                </div>
+              )}
+              {paper.link && (
+                <a
+                  href={paper.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center mt-3 text-sm font-medium transition-colors"
+                  style={`color: ${siteConfig.personal.accentColor}`}
+                >
+                  Link →
+                </a>
+              )}
             </div>
-          </div>
+          ))}
         </div>
       </div>
-    </section>
-  )
-}
+    )}
+
+    <!-- Other papers -->
+    {otherPapers.length > 0 && (
+      <div class="space-y-6">
+        {otherPapers.map((paper) => (
+          <div class="p-5 sm:p-6 rounded-xl border border-gray-200 bg-white">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
+              <h3 class="text-base sm:text-lg font-bold text-gray-900">
+                {paper.title}
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                {paper.status && (
+                  <span
+                    class={`px-2 py-1 rounded-full text-xs font-bold ${
+                      paper.status === "accepted"
+                        ? "bg-green-100 text-green-800"
+                        : paper.status === "submitting"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-purple-100 text-purple-800"
+                    }`}
+                  >
+                    {paper.status === "accepted"
+                      ? t.statusAccepted
+                      : paper.status === "submitting"
+                      ? t.statusSubmitting
+                      : t.statusPreprint}
+                  </span>
+                )}
+                {paper.level && (
+                  <span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                    {paper.level}
+                  </span>
+                )}
+              </div>
+            </div>
+            <p class="text-sm text-gray-500 mb-1">
+              {paper.venue}
+            </p>
+            <p class="text-sm text-gray-600 mb-2">
+              {paper.authors}
+            </p>
+            {paper.myRole && (
+              <p class="text-sm font-medium" style={`color: ${siteConfig.personal.accentColor}`}>
+                {paper.myRole}
+              </p>
+            )}
+            {paper.contribution && (
+              <p class="text-sm text-gray-500 mt-1">
+                {paper.contribution}
+              </p>
+            )}
+            {paper.link && (
+              <a
+                href={paper.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center mt-2 text-sm font-medium transition-colors"
+                style={`color: ${siteConfig.personal.accentColor}`}
+              >
+                Link →
+              </a>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>

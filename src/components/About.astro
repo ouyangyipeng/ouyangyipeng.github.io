@@ -1,38 +1,47 @@
 ---
-import { siteConfig } from "../config";
+import { getSiteConfig } from "../config";
+import { ui } from "../i18n/ui";
+import type { Lang } from "../config/types";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const siteConfig = getSiteConfig(lang);
+const t = ui[lang];
 ---
 
-<section id="about" class="p-8 sm:p-12 md:p-16 lg:p-24">
-  <div>
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
-      <div class="lg:col-span-4">
-        <h2
-          class="text-3xl sm:text-4xl md:text-5xl xl:text-7xl font-bold text-gray-900"
-        >
-          About Me
-        </h2>
-        <div
-          class="w-[75px] h-[5px] mt-2 rounded-full"
-          style={`background-color: ${siteConfig.personal.accentColor}`}
-        >
-        </div>
-      </div>
-
-      <div class="lg:col-span-8 space-y-8">
-        <p class="text-lg sm:text-xl md:text-2xl leading-relaxed text-gray-600">
+<section id="about" class="py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-12">
+      {t.sectionAbout}
+    </h2>
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
+      <div class="lg:col-span-1">
+        <p class="text-base sm:text-lg leading-7 text-gray-600">
           {siteConfig.about.bio}
         </p>
-
-        <div class="pt-4">
-          <div class="flex flex-wrap gap-3">
-            {
-              siteConfig.about.skills.map((skill) => (
-                <span class="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-100 text-gray-800 rounded-full text-sm sm:text-base md:text-lg font-medium hover:bg-gray-200 transition-colors duration-200">
-                  {skill}
-                </span>
-              ))
-            }
-          </div>
+      </div>
+      <div class="lg:col-span-3">
+        <div class="flex flex-wrap gap-2 mb-8">
+          {siteConfig.about.skills.map((skill) => (
+            <span
+              class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 border border-gray-200"
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+        <div class="flex flex-wrap gap-3">
+          {siteConfig.about.researchDirections.map((dir) => (
+            <span
+              class="px-4 py-2 rounded-full text-sm sm:text-base font-medium text-white"
+              style={`background-color: ${siteConfig.personal.accentColor}`}
+            >
+              {dir}
+            </span>
+          ))}
         </div>
       </div>
     </div>

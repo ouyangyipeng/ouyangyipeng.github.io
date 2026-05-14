@@ -1,12 +1,15 @@
 ---
-import { siteConfig } from "../config";
+import { ui } from "../i18n/ui";
+import type { Lang } from "../config/types";
 
-const hasProjects = siteConfig.projects && siteConfig.projects.length > 0;
-const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
-const hasEducation = siteConfig.education && siteConfig.education.length > 0;
-const hasResearch = siteConfig.research && siteConfig.research.length > 0;
-const hasAwards = siteConfig.awards && siteConfig.awards.length > 0;
-const hasNexa = siteConfig.nexa && siteConfig.nexa.links && siteConfig.nexa.links.length > 0;
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+const altLang: Lang = lang === "en" ? "zh" : "en";
+const altPath = altLang === "en" ? "/" : "/zh/";
 ---
 
 <header
@@ -20,87 +23,72 @@ const hasNexa = siteConfig.nexa && siteConfig.nexa.links && siteConfig.nexa.link
           href="#about"
           class="text-gray-700 hover:text-black transition-colors font-medium"
         >
-          About
+          {t.navAbout}
         </a>
       </li>
-      {
-        hasNexa && (
-          <li>
-            <a
-              href="#nexa"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-            >
-              Nexa
-            </a>
-          </li>
-        )
-      }
-      {
-        hasResearch && (
-          <li>
-            <a
-              href="#research"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-            >
-              Research
-            </a>
-          </li>
-        )
-      }
-      {
-        hasExperience && (
-          <li>
-            <a
-              href="#experience"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-            >
-              Experience
-            </a>
-          </li>
-        )
-      }
-      {
-        hasProjects && (
-          <li>
-            <a
-              href="#projects"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-            >
-              Projects
-            </a>
-          </li>
-        )
-      }
-      {
-        hasEducation && (
-          <li>
-            <a
-              href="#education"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-            >
-              Education
-            </a>
-          </li>
-        )
-      }
-      {
-        hasAwards && (
-          <li>
-            <a
-              href="#awards"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-            >
-              Awards
-            </a>
-          </li>
-        )
-      }
       <li>
         <a
-          href="/blog/"
+          href="#nexa"
           class="text-gray-700 hover:text-black transition-colors font-medium"
         >
-          Blog
+          {t.navNexa}
+        </a>
+      </li>
+      <li>
+        <a
+          href="#research"
+          class="text-gray-700 hover:text-black transition-colors font-medium"
+        >
+          {t.navResearch}
+        </a>
+      </li>
+      <li>
+        <a
+          href="#experience"
+          class="text-gray-700 hover:text-black transition-colors font-medium"
+        >
+          {t.navExperience}
+        </a>
+      </li>
+      <li>
+        <a
+          href="#projects"
+          class="text-gray-700 hover:text-black transition-colors font-medium"
+        >
+          {t.navProjects}
+        </a>
+      </li>
+      <li>
+        <a
+          href="#education"
+          class="text-gray-700 hover:text-black transition-colors font-medium"
+        >
+          {t.navEducation}
+        </a>
+      </li>
+      <li>
+        <a
+          href="#awards"
+          class="text-gray-700 hover:text-black transition-colors font-medium"
+        >
+          {t.navAwards}
+        </a>
+      </li>
+      <li>
+        <a
+          href={lang === "en" ? "/blog/" : "/zh/blog/"}
+          class="text-gray-700 hover:text-black transition-colors font-medium"
+        >
+          {t.navBlog}
+        </a>
+      </li>
+      <li class="ml-4">
+        <a
+          href={altPath}
+          class="px-3 py-1 rounded-full text-sm font-bold border-2 transition-colors duration-300"
+          style={`border-color: var(--accent-color, #6d28d9); color: var(--accent-color, #6d28d9);`}
+        >
+          {t.langSwitchLabel}
         </a>
       </li>
     </ul>
@@ -108,12 +96,16 @@ const hasNexa = siteConfig.nexa && siteConfig.nexa.links && siteConfig.nexa.link
 </header>
 
 <script>
-  window.addEventListener("scroll", () => {
-    const header = document.getElementById("header");
-    if (window.scrollY > 100) {
-      header?.classList.add("bg-white/80", "backdrop-blur-sm");
-    } else {
-      header?.classList.remove("bg-white/80", "backdrop-blur-sm");
-    }
-  });
+  const header = document.getElementById("header");
+  if (header) {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        header.classList.add("bg-white/80", "backdrop-blur-md", "shadow-sm");
+        header.classList.remove("bg-transparent");
+      } else {
+        header.classList.remove("bg-white/80", "backdrop-blur-md", "shadow-sm");
+        header.classList.add("bg-transparent");
+      }
+    });
+  }
 </script>
