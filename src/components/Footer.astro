@@ -1,0 +1,88 @@
+---
+import { siteConfig } from "../config";
+---
+
+<footer class="relative bg-gray-50 border-t border-gray-200">
+  <div class="mx-auto max-w-6xl px-6 py-12 lg:px-8">
+    <div
+      class="flex flex-col md:flex-row md:items-center md:justify-between gap-8"
+    >
+      <div class="flex flex-col gap-4">
+        <h3 class="text-2xl font-bold text-gray-800">
+          {siteConfig.personal.name}
+        </h3>
+        <p class="text-base text-gray-600">
+          {siteConfig.personal.title}
+        </p>
+        <div class="flex gap-x-6">
+          <a
+            href={`mailto:${siteConfig.personal.social.email}`}
+            aria-label="Email"
+            class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
+            style={`--accent-color: ${siteConfig.personal.accentColor}`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path>
+              <path d="M3 7l9 6l9 -6"></path>
+            </svg>
+          </a>
+          {siteConfig.personal.social.github && (
+            <a
+              href={siteConfig.personal.social.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+              class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
+              style={`--accent-color: ${siteConfig.personal.accentColor}`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.928-.399 2.929-.399 1.001 0 2.007.134 2.929.399 3.293-1.552 3.301-1.23 3.301-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-3.807 5.624-5.479 5.919.43.372.823 1.102.823 2.222v3.293c0 .719.481 1.278 1.229 1.078 4.771-1.586 8.207-5.086 8.207-11.388 0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </a>
+          )}
+          {siteConfig.personal.social.website && (
+            <a
+              href={siteConfig.personal.social.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Website"
+              class="text-gray-600 transition-colors duration-300 hover:text-[var(--accent-color)]"
+              style={`--accent-color: ${siteConfig.personal.accentColor}`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path>
+                <path d="M3.6 9h16.8"></path>
+                <path d="M3.6 15h16.8"></path>
+                <path d="M12 3a15 15 0 0 0 4 9a15 15 0 0 1 -4 9a15 15 0 0 1 -4 -9a15 15 0 0 0 4 -9"></path>
+              </svg>
+            </a>
+          )}
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4 text-right">
+        <a href="/blog/" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">
+          Blog
+        </a>
+        {siteConfig.nexa.github && (
+          <a href={siteConfig.nexa.github} target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">
+            Nexa GitHub
+          </a>
+        )}
+        {siteConfig.nexa.docs && (
+          <a href={siteConfig.nexa.docs} target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">
+            Nexa Docs
+          </a>
+        )}
+      </div>
+    </div>
+
+    <div class="mt-8 pt-8 border-t border-gray-200 text-center">
+      <p class="text-sm text-gray-500">
+        &copy; {new Date().getFullYear()} {siteConfig.personal.name}. Built with Astro & Tailwind CSS.
+      </p>
+    </div>
+  </div>
+</footer>

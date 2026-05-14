@@ -1,0 +1,60 @@
+---
+import { siteConfig } from "../config";
+const hasAwards = siteConfig.awards && siteConfig.awards.length > 0;
+---
+
+{
+  hasAwards && (
+    <section id="awards" class="p-8 sm:p-12 md:p-16 lg:p-24">
+      <div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+          <div class="lg:col-span-4">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl xl:text-7xl font-bold text-gray-900">
+              Awards
+            </h2>
+            <div
+              class="w-[75px] h-[5px] mt-2 rounded-full"
+              style={`background-color: ${siteConfig.personal.accentColor}`}
+            />
+          </div>
+
+          <div class="lg:col-span-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              {siteConfig.awards.map((award) => (
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-5 hover:shadow-md transition-shadow duration-300">
+                  <h3 class="text-base sm:text-lg font-semibold text-gray-900">
+                    {award.title}
+                  </h3>
+                  {award.date && (
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">
+                      {award.date}
+                    </p>
+                  )}
+                  {award.description && (
+                    <p class="text-sm sm:text-base text-gray-600 mt-2">
+                      {award.description}
+                    </p>
+                  )}
+                  {award.link && (
+                    <a
+                      href={award.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1 text-sm font-medium mt-2 transition-colors duration-200"
+                      style={`color: ${siteConfig.personal.accentColor}`}
+                    >
+                      View Details
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7V17" />
+                      </svg>
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

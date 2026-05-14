@@ -1,0 +1,58 @@
+import type { Paper } from "./types";
+
+export const research: Paper[] = [
+  {
+    title: "XFuse: PTX Level Code Fusion for GPU Concurrent Kernel Execution",
+    venue: "TACO",
+    level: "CCF-A",
+    status: "submitting",
+    authors: "K. Wu, Y. Ouyang et al.",
+    myRole: "Co-author",
+    contribution: "GoPTX 的扩展工作，增加多种调优参数与内核匹配策略，总体性能提升至 15.8%",
+  },
+  {
+    title: "YatCC-AI: LLM Augmented HPC Workbench Prototype for Practices and Researches",
+    venue: "CHI",
+    level: "CCF-A",
+    status: "submitting",
+    authors: "K. Wu, H. Chen, Z. Zhu, Q. Lin, Y. Ouyang et al.",
+    myRole: "Co-author",
+    contribution: "AI/LLM部分构造，重要文档编写",
+  },
+  {
+    title: "WARM: WebAssembly-based Multi-request Aggregation for Optimizing LLM Applications",
+    venue: "NeurIPS",
+    level: "CCF-A",
+    status: "submitting",
+    authors: "Y. Han et al.",
+    myRole: "Non-author contributor",
+    contribution: "参与排版、图片布局",
+  },
+  {
+    title: "GoPTX: PTX Level Code Fusion for GPU Concurrent Kernel Execution",
+    venue: "DAC'25",
+    level: "CCF-A",
+    status: "accepted",
+    authors: "K. Wu et al.",
+    myRole: "Co-author",
+    contribution: "XFuse 的前序工作",
+    link: "https://doi.org/10.5281/zenodo.19994263",
+  },
+  {
+    title: "Towards Long-Horizon Vision-Language Navigation: Platform, Benchmark and Method",
+    venue: "CVPR'25",
+    level: "CCF-A",
+    status: "accepted",
+    authors: "Xinshuai Song et al.",
+    myRole: "Non-author contributor",
+    contribution: "数据筛选，代码review",
+  },
+  {
+    title: "3DAffordSplat: Efficient Affordance Reasoning with 3D Gaussians",
+    venue: "Preprint",
+    status: "preprint",
+    authors: "Zeming Wei et al.",
+    myRole: "Non-author contributor",
+    contribution: "数据筛选、标注",
+  },
+];
