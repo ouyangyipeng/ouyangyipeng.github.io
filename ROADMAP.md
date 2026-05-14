@@ -28,20 +28,20 @@ src/config/
 ├── education.ts  → 教育背景
 ├── research.ts   → 论文
 ├── awards.ts     → 奖项
-├── nexa.ts       → Nexa 生态专属
+├── nexa.ts       → Nexa 项目配置
 └── index.ts      → 聚合为 siteConfig
 ```
 
 **Trade-off**: 增加了文件数量，但每个文件职责单一、修改时不会误触其他配置。`index.ts` 作为唯一聚合点，组件只需 `import { siteConfig } from "../config"` 即可获取全部数据。
 
-#### 2. Nexa 生态专属 Section
+#### 2. Nexa 项目专属 Section
 
 **问题**: Nexa 项目是站点的核心特色，需要比普通项目卡片更突出的展示方式。
 
 **决策**: 创建独立的 `NexaEcosystem.astro` 组件，包含：
 - 浅紫色背景区 (`bg-purple-50`) 区别于其他 section
-- 左侧：项目介绍 + GitHub/Paper/Docs 三个行动按钮
-- 右侧：3×2 网格展示 6 个生态链接（Docs/SkCC/evobench/epicontext/Org/Author）
+- 介绍文字 + Homepage/GitHub/Paper/Docs 四个行动按钮
+- 生态链接以简单列表形式展示（icon + name + description）
 
 **Trade-off**: 增加了一个非通用组件，但确保了 Nexa 内容的视觉突出度和信息完整性。
 
@@ -52,9 +52,7 @@ src/config/
 **决策**: 使用 Astro 内置的 Content Collections：
 - `src/content/config.ts` 定义 schema（title, description, pubDate, tags, draft, image）
 - `src/content/blog/*.md` 存放 Markdown 文章
-- `src/pages/blog/index.astro` 列表页（按日期排序，过滤 draft）
-- `src/pages/blog/[...slug].astro` 详情页（动态路由）
-- `src/layouts/BlogLayout.astro` 文章布局（含 sticky header、标签、日期）
+- 博客页面共享主页 Header/Footer，采用现代 timeline 风格
 
 **Trade-off**: Content Collections 是 Astro 原生功能，零额外依赖，但意味着文章只能通过 Git 提交添加（无在线编辑器）。对于科研工作者而言，Git-based workflow 是自然的选择。
 
@@ -63,24 +61,22 @@ src/config/
 **问题**: 需要一个与 Nexa 项目风格一致的视觉主题。
 
 **决策**: 使用 `#6d28d9`（Tailwind `violet-700`）作为全局强调色：
-- Hero 区 Nexa Logo 光晕效果
+- Hero 区名字高亮
 - 各 section 标题装饰
 - 按钮、链接 hover 状态
 - Nexa 生态区背景使用 `bg-purple-50` 作为浅色变体
 
-#### 5. 字体 — IBM Plex Mono
+#### 5. 字体 — IBM Plex Mono (本地打包)
 
-**问题**: devportfolio 原模板使用 IBM Plex Mono，与 Nexa 站点风格一致。
+**问题**: Google Fonts CDN 在某些网络环境下不可用，导致字体缺失。
 
-**决策**: 保持 IBM Plex Mono，通过 Google Fonts 加载，在 `global.css` 中定义为 `--font-mono`。
+**决策**: 使用 `@fontsource/ibm-plex-mono` npm 包，字体文件随构建打包到 dist，不依赖外部 CDN。
 
 #### 6. 部署 — GitHub Actions → GitHub Pages
 
-**问题**: 需要自动化部署，且使用 pnpm 作为包管理器。
-
 **决策**: 使用 GitHub Actions 官方 Pages workflow：
-- `pnpm/action-setup@v4` 安装 pnpm
-- `actions/setup-node@v4` 配置 Node 20
+- `pnpm/action-setup@v4` 安装 pnpm 11
+- `actions/setup-node@v4` 配置 Node 24
 - `actions/upload-pages-artifact@v3` + `actions/deploy-pages@v4` 部署
 - 触发条件：push to main + manual workflow_dispatch
 
@@ -97,21 +93,47 @@ src/config/
 | `Project` | `role`, `level`, `leader`, `leaderLink` | 标注项目角色和负责人 |
 | `Experience` | `link` | 组织官网链接 |
 | `Education` | `link` | 学校官网链接 |
-| `Paper` | 整个新类型 | 论文展示（venue, level, status, myRole, contribution） |
-| `Award` | 整个新类型 | 奖项展示（date, description, link） |
-| `NexaConfig` | 整个新类型 | Nexa 生态专属配置 |
+| `Paper` | 整个新类型 + `dois[]`, `creditRoles[]`, `pinned` | 论文展示 |
+| `Award` | 整个新类型 | 奖项展示 |
+| `NexaConfig` | 整个新类型 + `homepage` | Nexa 项目专属配置 |
 | `AboutConfig` | `researchDirections` | 研究方向标签 |
+| `SocialLinks` | `orcid` | ORCID 链接 |
 
 #### 9. Section 顺序
 
 主页 section 排列顺序的决策逻辑：
 
-Hero → About → NexaEcosystem → Research → Experience → Projects → Education → Awards
+Hero → About → Nexa Project → Research → Experience → Projects → Education → Awards
 
 - **Hero & About** 最先：建立身份认知
-- **NexaEcosystem** 紧随：突出核心项目
+- **Nexa Project** 紧随：突出核心项目
 - **Research** 在 Experience 前：科研主页优先展示学术成果
 - **Experience → Projects → Education → Awards**：补充性信息递减
+
+---
+
+## V1.1 — i18n + 内容修正 (2026-05-14)
+
+### 变更内容
+
+1. **中英文双语版本**: 添加 `/zh/` 路由，所有组件接受 `lang` prop，配置文件改为 `get*()` 函数
+2. **Hero 重设计**: 改为 devportfolio 模板风格的大字居中布局（Hello → I'm → title），带 fade-in 动画
+3. **字体本地化**: 从 Google Fonts CDN 改为 `@fontsource/ibm-plex-mono` npm 包
+4. **名字修正**: EN: "Yipeng Ouyang", ZH: "欧阳易芃"
+5. **研究方向修正**: 从 "AI Integrated Compilers + Embodied Intelligence" 改为 "Agentic Systems + SysML"
+6. **移除 HCPII Lab**: 从 experience 中删除
+7. **添加 ORCID**: `0009-0003-0544-4612`
+8. **论文更新**: 置顶 Nexa + SkCC（pinned），新增 GraphSkill/SkillCompiler，移除 GoPTX
+9. **Nexa Section**: 标题改为 "Nexa Project"，添加 homepage (www.nexa-lang.com)，生态链接改为简单列表
+10. **博客重设计**: 共享 Header/Footer，现代 timeline 风格
+
+### 错误记录
+
+1. **CSS quotes 语法错误**: `quotes: "\201C"\201D"\2018"\2019"` 导致 Tailwind v4 解析器报 "Unterminated string"。修复：移除该属性。
+2. **Astro.glob 废弃**: `Astro.glob` 在 Astro 5.x 中已废弃，`pubDate` 返回字符串而非 Date 对象。修复：改用 `getCollection` API。
+3. **pnpm-workspace.yaml 缺少 packages 字段**: `pnpm/action-setup@v4` 报错。修复：添加 `packages: ["."]`。
+4. **@fontsource 导入路径错误**: `@fontsource/ibm-plex-mono/400` 和 `/800` 不存在。修复：使用 `latin-400`/`latin-500`/`latin-600`/`latin-700` 格式，移除 800 weight（IBM Plex Mono 无此 weight）。
+5. **GitHub Pages 缺少 `.nojekyll` 导致 CSS 丢失**: GitHub Pages 默认使用 Jekyll 处理，Jekyll 会忽略所有以 `_` 开头的目录（如 `_astro`），导致 CSS 文件 `/_astro/*.css` 无法被加载。Blog 页面因无内联样式而显示为纯文本。修复：在 `public/` 目录添加空文件 `.nojekyll`，Astro 构建时自动复制到 `dist/`，告诉 GitHub Pages 跳过 Jekyll 处理。
 
 ---
 
@@ -128,12 +150,6 @@ Hero → About → NexaEcosystem → Research → Experience → Projects → Ed
 | `2026-03-opensource.html` | `2026-03-10-opensource.md` | v0.9-alpha Release |
 | `2026-04-ecosystem.html` | `2026-04-23-ecosystem.md` | v1.3.7 Milestone |
 | `2026-05-harness.html` | `2026-05-06-harness.md` | Harness Native v2.0 Vision |
-
-迁移过程中的处理：
-- HTML 结构 → Markdown 语法（标题、列表、代码块、表格）
-- 保留所有技术细节和代码示例
-- 添加标准 frontmatter（title, description, pubDate, tags）
-- 导航栏和页脚等页面框架元素不迁移（由 Astro Layout 处理）
 
 ---
 
