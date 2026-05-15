@@ -122,6 +122,16 @@ export interface I18nStrings {
   blogTitle: string;
   blogDesc: string;
   blogBack: string;
+  blogNavRecent: string;
+  blogNavCategories: string;
+  blogNavTags: string;
+  blogNavArchives: string;
+  blogSidebarRecent: string;
+  blogSidebarStats: string;
+  blogCategories: string;
+  blogTags: string;
+  blogArchives: string;
+  blogReadMore: string;
   footerBuilt: string;
   langSwitchLabel: string;
   statusAccepted: string;

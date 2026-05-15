@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6d28d9;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:0.05"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="#f9fafb"/>
+  <rect width="800" height="400" fill="url(#bg)"/>
+  <!-- Lightbulb icon -->
+  <g transform="translate(400,180)">
+    <circle cx="0" cy="-20" r="60" fill="#6d28d9" opacity="0.2"/>
+    <circle cx="0" cy="-20" r="40" fill="#6d28d9" opacity="0.4"/>
+    <path d="M-15,30 L-15,50 Q-15,60 0,60 Q15,60 15,50 L15,30" fill="#6d28d9" opacity="0.6"/>
+    <line x1="-8" y1="45" x2="8" y2="45" stroke="#6d28d9" stroke-width="2" opacity="0.5"/>
+    <line x1="-8" y1="50" x2="8" y2="50" stroke="#6d28d9" stroke-width="2" opacity="0.5"/>
+    <line x1="-8" y1="55" x2="8" y2="55" stroke="#6d28d9" stroke-width="2" opacity="0.5"/>
+    <!-- Rays -->
+    <line x1="0" y1="-90" x2="0" y2="-75" stroke="#6d28d9" stroke-width="3" opacity="0.6"/>
+    <line x1="-50" y1="-70" x2="-38" y2="-58" stroke="#6d28d9" stroke-width="3" opacity="0.6"/>
+    <line x1="50" y1="-70" x2="38" y2="-58" stroke="#6d28d9" stroke-width="3" opacity="0.6"/>
+    <line x1="-70" y1="-20" x2="-55" y2="-20" stroke="#6d28d9" stroke-width="3" opacity="0.6"/>
+    <line x1="70" y1="-20" x2="55" y2="-20" stroke="#6d28d9" stroke-width="3" opacity="0.6"/>
+  </g>
+  <text x="400" y="320" text-anchor="middle" font-family="monospace" font-size="24" fill="#6d28d9" opacity="0.8">The Birth of Nexa</text>
+</svg>

@@ -2,9 +2,7 @@
 import { getCollection } from "astro:content";
 import { getSiteConfig } from "../../../config";
 import { ui } from "../../../i18n/ui";
-import Header from "../../../components/Header.astro";
-import Footer from "../../../components/Footer.astro";
-import "../../../styles/global.css";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -18,62 +16,52 @@ const { post, lang } = Astro.props;
 const siteConfig = getSiteConfig(lang);
 const t = ui[lang];
 const { Content } = await post.render();
+const prefix = "/zh/blog";
+
+const categoryClass = `cat-${post.data.category.toLowerCase().replace(/\s+/g, "-")}`;
 ---
 
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={post.data.description} />
-    <title>{post.data.title} — {siteConfig.personal.name}</title>
-  </head>
-  <body class="min-h-screen bg-white">
-    <Header lang={lang} />
-
-    <main class="max-w-3xl mx-auto px-6 pt-32 pb-16">
-      <article>
-        <!-- Article header -->
-        <header class="mb-10 border-b border-gray-200 pb-8">
-          <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 leading-tight">
-            {post.data.title}
-          </h1>
-          <div class="mt-4 flex items-center gap-3 text-sm text-gray-400">
-            <time datetime={post.data.pubDate.toISOString()}>
-              {post.data.pubDate.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
-            </time>
-            {post.data.updatedDate && (
-              <span>
-                · 更新于 {post.data.updatedDate.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
-              </span>
-            )}
-          </div>
-          {post.data.tags && post.data.tags.length > 0 && (
-            <div class="mt-4 flex flex-wrap gap-2">
-              {post.data.tags.map((tag: string) => (
-                <span class="px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-500">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-        </header>
-
-        <!-- Article content -->
-        <div class="prose" style={`--accent-color: ${siteConfig.personal.accentColor}`}>
-          <Content />
+<BlogLayout lang={lang} title={post.data.title} activeNav="recent">
+  <article>
+    <!-- Article header -->
+    <div class="article-header">
+      {post.data.cover && (
+        <div class="mb-6 rounded-lg overflow-hidden">
+          <img src={post.data.cover} alt={post.data.title} class="w-full h-48 object-cover" />
         </div>
-
-        <!-- Back link -->
-        <div class="mt-16 pt-8 border-t border-gray-200">
-          <a href="/zh/blog/" class="text-sm font-medium transition-colors" style={`color: ${siteConfig.personal.accentColor}`}>
-            {t.blogBack}
-          </a>
+      )}
+      <h1 class="article-title">{post.data.title}</h1>
+      <div class="article-meta">
+        <time datetime={post.data.pubDate.toISOString()}>
+          {post.data.pubDate.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
+        </time>
+        {post.data.updatedDate && (
+          <span>
+            · 更新于 {post.data.updatedDate.toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
+          </span>
+        )}
+        <span class:list={[categoryClass, "post-card-category"]}>{post.data.category}</span>
+      </div>
+      {post.data.tags && post.data.tags.length > 0 && (
+        <div class="article-tags">
+          {post.data.tags.map((tag: string) => (
+            <a href={`${prefix}/tags/${tag.toLowerCase()}`} class="tag-item">{tag}</a>
+          ))}
         </div>
-      </article>
-    </main>
+      )}
+    </div>
 
-    <Footer lang={lang} />
-  </body>
-</html>
+    <!-- Article content -->
+    <div class="prose" style={`--accent-color: ${siteConfig.personal.accentColor}`}>
+      <Content />
+    </div>
+
+    <!-- Back link -->
+    <div class="mt-16 pt-8 border-t border-gray-200">
+      <a href={`${prefix}/`} class="article-back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+        {t.blogBack}
+      </a>
+    </div>
+  </article>
+</BlogLayout>

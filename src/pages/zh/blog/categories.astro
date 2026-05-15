@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import { getSiteConfig } from "../../../config";
+import { ui } from "../../../i18n/ui";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+
+const lang = "zh";
+const siteConfig = getSiteConfig(lang);
+const t = ui[lang];
+const prefix = "/zh/blog";
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+// Group by category
+const categoryMap = new Map<string, number>();
+allPosts.forEach((post) => {
+  const cat = post.data.category;
+  categoryMap.set(cat, (categoryMap.get(cat) || 0) + 1);
+});
+
+const categories = [...categoryMap.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<BlogLayout lang={lang} title={t.blogCategories} activeNav="categories">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">{t.blogCategories}</h1>
+    <div>
+      {categories.map(([cat, count]) => (
+        <a href={`${prefix}/categories/${cat.toLowerCase()}`} class="category-list-item">
+          <span class="category-list-name">{cat}</span>
+          <span class="category-list-count">{count} 篇</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BlogLayout>

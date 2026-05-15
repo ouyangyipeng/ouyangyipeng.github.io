@@ -39,7 +39,7 @@ const configs: Record<Lang, NexaConfig> = {
       {
         name: "Author",
         description: "Owen — creator of the Nexa language and Harness Native methodology.",
-        url: "https://author.nexa-lang.com/",
+        url: "https://oyyp.nexa-lang.com/",
         icon: "👤",
       },
     ],
@@ -85,7 +85,7 @@ const configs: Record<Lang, NexaConfig> = {
       {
         name: "作者",
         description: "Owen — Nexa 语言与 Harness Native 方法论的创建者。",
-        url: "https://author.nexa-lang.com/",
+        url: "https://oyyp.nexa-lang.com/",
         icon: "👤",
       },
     ],

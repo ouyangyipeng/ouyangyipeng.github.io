@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-这是 Yipeng Ouyang (欧阳易芃, ouyangyipeng) 的个人主页 + 博客站点，部署在 GitHub Pages，自定义域名 `author.nexa-lang.com`。
+这是 Yipeng Ouyang (欧阳易芃, ouyangyipeng) 的个人主页 + 博客站点，部署在 GitHub Pages，自定义域名 `oyyp.nexa-lang.com`。
 
 基于 Astro 5.x + Tailwind CSS v4 构建，从 devportfolio 模板演化而来，增加了博客系统、Nexa 项目展示区、论文/奖项 section、中英文双语支持。
 
@@ -15,7 +15,7 @@
 - **Blog**: Astro Content Collections (Markdown + frontmatter schema)
 - **i18n**: 自定义双语言系统（EN: `/`, ZH: `/zh/`）
 - **Deploy**: GitHub Actions → GitHub Pages (Node 24, pnpm 11)
-- **Domain**: author.nexa-lang.com (CNAME)
+- **Domain**: oyyp.nexa-lang.com (CNAME)
 
 ## 关键架构决策
 
@@ -23,7 +23,7 @@
 
 2. **组件与配置分离**: 组件只负责渲染 `siteConfig` 中的数据，不硬编码任何内容。所有组件接受 `lang` prop。
 
-3. **博客零依赖**: 使用 Astro 内置 Content Collections，文章为 Markdown 文件，通过 Git 提交管理。
+3. **博客独立化 (Stellar 风格)**: Blog 使用独立 `BlogLayout.astro`，不共享主页 Header/Footer。左右侧边栏 + 卡片式文章列表 + 分类/标签/归档功能。Content Schema 扩展 `category` 和 `cover` 字段。
 
 4. **主题色**: `#6d28d9` (violet-700)，在 `src/config/personal.ts` 的 `accentColor` 字段中定义。
 

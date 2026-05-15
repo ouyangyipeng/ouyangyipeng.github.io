@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6d28d9;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:0.05"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="#f9fafb"/>
+  <rect width="800" height="400" fill="url(#bg)"/>
+  <!-- GitHub/open source icon -->
+  <g transform="translate(400,170)">
+    <circle cx="0" cy="0" r="70" fill="#6d28d9" opacity="0.15"/>
+    <circle cx="0" cy="0" r="50" fill="#6d28d9" opacity="0.25"/>
+    <!-- Simplified git branch -->
+    <circle cx="-20" cy="-30" r="8" fill="#6d28d9" opacity="0.7"/>
+    <circle cx="20" cy="-30" r="8" fill="#6d28d9" opacity="0.7"/>
+    <circle cx="0" cy="30" r="8" fill="#6d28d9" opacity="0.7"/>
+    <line x1="-20" y1="-22" x2="0" y2="22" stroke="#6d28d9" stroke-width="3" opacity="0.5"/>
+    <line x1="20" y1="-22" x2="0" y2="22" stroke="#6d28d9" stroke-width="3" opacity="0.5"/>
+    <line x1="-20" y1="-22" x2="20" y2="-22" stroke="#6d28d9" stroke-width="3" opacity="0.5"/>
+    <!-- AGPL badge -->
+    <rect x="-40" y="50" width="80" height="20" rx="4" fill="#6d28d9" opacity="0.4"/>
+    <text x="0" y="64" text-anchor="middle" font-family="monospace" font-size="10" fill="white" opacity="0.9">AGPL-3.0</text>
+  </g>
+  <text x="400" y="320" text-anchor="middle" font-family="monospace" font-size="24" fill="#6d28d9" opacity="0.8">Nexa Goes Open Source</text>
+</svg>

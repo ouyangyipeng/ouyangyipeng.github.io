@@ -3,6 +3,8 @@ title: "From Zero to MVP — Building the First Nexa Transpiler"
 description: "How we built the Nexa transpiler in 6 weeks: Lark parser, Earley algorithm, AST transformer with ambiguity scoring, and a Python code generator."
 pubDate: 2026-02-20
 tags: ["Compiler", "Engineering", "MVP"]
+category: "Engineering"
+cover: "/images/blog/implementation.svg"
 ---
 
 Six weeks ago, Nexa existed only as a syntax sketch in a notebook. Today, we have a working transpiler that turns `.nx` files into executable Python code. Here's how we built it.

@@ -4,7 +4,7 @@
 
 ## 🌐 站点信息
 
-- **URL**: [author.nexa-lang.com](https://author.nexa-lang.com)
+- **URL**: [oyyp.nexa-lang.com](https://oyyp.nexa-lang.com)
 - **Repository**: [ouyangyipeng/ouyangyipeng.github.io](https://github.com/ouyangyipeng/ouyangyipeng.github.io)
 - **Deploy**: GitHub Actions → GitHub Pages (自动部署)
 - **Languages**: English (`/`) + Chinese (`/zh/`) with quick switch

@@ -10,7 +10,7 @@ const configs: Record<Lang, PersonalConfig> = {
     social: {
       email: "ouyyp5@mail2.sysu.edu.cn",
       github: "https://github.com/ouyangyipeng",
-      website: "https://author.nexa-lang.com",
+      website: "https://oyyp.nexa-lang.com",
       orcid: "https://orcid.org/0009-0003-0544-4612",
     },
   },
@@ -23,7 +23,7 @@ const configs: Record<Lang, PersonalConfig> = {
     social: {
       email: "ouyyp5@mail2.sysu.edu.cn",
       github: "https://github.com/ouyangyipeng",
-      website: "https://author.nexa-lang.com",
+      website: "https://oyyp.nexa-lang.com",
       orcid: "https://orcid.org/0009-0003-0544-4612",
     },
   },

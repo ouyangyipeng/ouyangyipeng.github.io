@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import { getSiteConfig } from "../../config";
+import { ui } from "../../i18n/ui";
+import BlogLayout from "../../layouts/BlogLayout.astro";
+
+const lang = "en";
+const siteConfig = getSiteConfig(lang);
+const t = ui[lang];
+const prefix = "/blog";
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+// Collect all tags with counts
+const tagMap = new Map<string, number>();
+allPosts.forEach((post) => {
+  (post.data.tags || []).forEach((tag) => {
+    tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+  });
+});
+
+const tags = [...tagMap.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<BlogLayout lang={lang} title={t.blogTags} activeNav="tags">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">{t.blogTags}</h1>
+    <div class="tag-cloud" style="gap: 12px;">
+      {tags.map(([tag, count]) => (
+        <a href={`${prefix}/tags/${tag.toLowerCase()}`} class="tag-item" style="font-size: ${Math.min(14 + count * 2, 24)}px;">
+          {tag} <span class="text-xs opacity-60">({count})</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BlogLayout>

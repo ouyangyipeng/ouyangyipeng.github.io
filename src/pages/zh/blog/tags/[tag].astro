@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import { getSiteConfig } from "../../../../config";
+import { ui } from "../../../../i18n/ui";
+import BlogLayout from "../../../../layouts/BlogLayout.astro";
+import PostCard from "../../../../components/blog/PostCard.astro";
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+  const allTags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
+  return allTags.map((tag) => ({
+    params: { tag: tag.toLowerCase() },
+    props: { tag, lang: "zh" },
+  }));
+}
+
+const { tag, lang } = Astro.props;
+const siteConfig = getSiteConfig(lang);
+const t = ui[lang];
+const prefix = "/zh/blog";
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const filteredPosts = allPosts
+  .filter((post) => (post.data.tags || []).includes(tag))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BlogLayout lang={lang} title={`${t.blogTags}: ${tag}`} activeNav="tags">
+  <div>
+    <div class="mb-8">
+      <a href={`${prefix}/tags/`} class="article-back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+        全部标签
+      </a>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">#{tag}</h1>
+    <div>
+      {filteredPosts.map((post) => (
+        <PostCard
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          category={post.data.category}
+          tags={post.data.tags}
+          cover={post.data.cover}
+          slug={post.slug}
+          lang={lang}
+        />
+      ))}
+    </div>
+  </div>
+</BlogLayout>

@@ -1,112 +1,185 @@
 ---
+import { getCollection } from "astro:content";
 import { getSiteConfig } from "../config";
 import { ui } from "../i18n/ui";
 import type { Lang } from "../config/types";
 import "../styles/global.css";
+import "../styles/blog.css";
 
 interface Props {
+  lang: Lang;
   title: string;
   description?: string;
-  pubDate?: Date;
-  updatedDate?: Date;
-  tags?: string[];
-  lang?: Lang;
-  backHref?: string;
+  activeNav?: string;
 }
 
-const {
-  title,
-  description,
-  pubDate,
-  updatedDate,
-  tags,
-  lang = "en",
-  backHref = "/blog/",
-} = Astro.props;
-
+const { lang, title, description, activeNav = "recent" } = Astro.props;
 const siteConfig = getSiteConfig(lang);
 const t = ui[lang];
-const locale = lang === "zh" ? "zh-CN" : "en-US";
-const htmlLang = lang === "zh" ? "zh-CN" : "en";
+const prefix = lang === "zh" ? "/zh/blog" : "/blog";
+const homePrefix = lang === "zh" ? "/zh/" : "/";
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const recentPosts = sortedPosts.slice(0, 5);
+
+// Stats
+const totalPosts = allPosts.length;
+const categories = [...new Set(allPosts.map((p) => p.data.category))];
+const tags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
 ---
 
-<html lang={htmlLang}>
+<html lang={lang === "zh" ? "zh-CN" : "en"}>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description || siteConfig.personal.description} />
-    <title>{title} — {siteConfig.personal.name} {t.blogTitle}</title>
+    <meta name="description" content={description || `${t.blogTitle} by ${siteConfig.personal.name}`} />
+    <title>{title} — {siteConfig.personal.name}</title>
   </head>
-  <body class="min-h-screen bg-white">
-    <!-- Header nav for blog -->
-    <header class="border-b border-gray-200 bg-white sticky top-0 z-50">
-      <nav class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href={lang === "en" ? "/" : "/zh/"} class="text-lg font-bold text-gray-900 hover:text-gray-700 transition-colors">
-          ← {siteConfig.personal.name}
-        </a>
-        <a href={backHref} class="text-base font-medium text-gray-600 hover:text-gray-900 transition-colors">
-          {t.blogTitle}
-        </a>
-      </nav>
-    </header>
+  <body class="min-h-screen bg-gray-50">
+    <!-- Mobile header (hidden on desktop) -->
+    <div class="blog-mobile-header">
+      <a href={homePrefix} class="blog-topnav-home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Home
+      </a>
+      <a href={`${prefix}/`} class:list={[activeNav === "recent" && "active"]}>{t.blogNavRecent}</a>
+      <a href={`${prefix}/categories/`} class:list={[activeNav === "categories" && "active"]}>{t.blogNavCategories}</a>
+      <a href={`${prefix}/tags/`} class:list={[activeNav === "tags" && "active"]}>{t.blogNavTags}</a>
+      <a href={`${prefix}/archives/`} class:list={[activeNav === "archives" && "active"]}>{t.blogNavArchives}</a>
+    </div>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-      <article>
-        <!-- Article header -->
-        <div class="mb-8">
-          <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            {title}
-          </h1>
-
-          {pubDate && (
-            <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
-              <time datetime={pubDate.toISOString()}>
-                {pubDate.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}
-              </time>
-              {updatedDate && (
-                <span class="text-gray-400">
-                  (Updated: {updatedDate.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })})
-                </span>
-              )}
-            </div>
-          )}
-
-          {tags && tags.length > 0 && (
-            <div class="flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                <span
-                  class="px-3 py-1 rounded-full text-xs sm:text-sm font-medium bg-gray-100 text-gray-700"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
+    <div class="blog-layout">
+      <!-- Left Sidebar -->
+      <aside class="blog-left">
+        <!-- Avatar + Title -->
+        <div class="flex flex-col items-center gap-2">
+          <img src="/images/nexa-logo.svg" alt="Logo" class="blog-sidebar-avatar" />
+          <div class="blog-sidebar-title">{siteConfig.personal.name}</div>
+          <div class="blog-sidebar-subtitle">{siteConfig.personal.title}</div>
         </div>
 
-        <!-- Article content -->
-        <div class="prose" style={`--accent-color: ${siteConfig.personal.accentColor}`}>
-          <slot />
+        <!-- Navigation -->
+        <nav class="blog-sidebar-nav">
+          <a href={homePrefix}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Home
+          </a>
+          <a href={`${prefix}/`} class:list={[activeNav === "recent" && "active"]}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.879 2.879C5 3.757 5 5.172 5 8v8c0 2.828 0 4.243.879 5.121C6.757 22 8.172 22 11 22h2c2.828 0 4.243 0 5.121-.879C19 20.243 19 18.828 19 16V8c0-2.828 0-4.243-.879-5.121C17.243 2 15.828 2 13 2h-2c-2.828 0-4.243 0-5.121.879M8.25 17a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75M9 12.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5zM8.25 9A.75.75 0 0 1 9 8.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 9" clip-rule="evenodd"></path></svg>
+            {t.blogNavRecent}
+          </a>
+          <a href={`${prefix}/categories/`} class:list={[activeNav === "categories" && "active"]}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2 6.95c0-.883 0-1.324.07-1.692A4 4 0 0 1 5.257 2.07C5.626 2 6.068 2 6.95 2c.386 0 .58 0 .766.017a4 4 0 0 1 2.18.904c.144.119.28.255.554.529L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z" opacity=".5"></path><path d="M20 6.238c0-.298-.005-.475-.025-.63a3 3 0 0 0-2.583-2.582C17.197 3 16.965 3 16.5 3H9.988c.116.104.247.234.462.45L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z"></path></svg>
+            {t.blogNavCategories}
+          </a>
+          <a href={`${prefix}/tags/`} class:list={[activeNav === "tags" && "active"]}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2 6.95c0-.883 0-1.324.07-1.692A4 4 0 0 1 5.257 2.07C5.626 2 6.068 2 6.95 2c.386 0 .58 0 .766.017a4 4 0 0 1 2.18.904c.144.119.28.255.554.529L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z" opacity=".5"></path><path d="M20 6.238c0-.298-.005-.475-.025-.63a3 3 0 0 0-2.583-2.582C17.197 3 16.965 3 16.5 3H9.988c.116.104.247.234.462.45L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z"></path></svg>
+            {t.blogNavTags}
+          </a>
+          <a href={`${prefix}/archives/`} class:list={[activeNav === "archives" && "active"]}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 21q-.825 0-1.412-.587T3 19q0-.825.588-1.412T5 17q.825 0 1.413.588T7 19q0 .825-.587 1.413T5 21m13.5 0q-.65 0-1.088-.475T16.9 19.4q-.275-2.425-1.312-4.537T12.9 11.1q-1.65-1.65-3.762-2.687T4.6 7.1q-.65-.075-1.125-.512T3 5.5q0-.65.45-1.062t1.075-.363q3.075.275 5.763 1.563t4.737 3.337q2.05 2.05 3.338 4.738t1.562 5.762q.05.625-.363 1.075T18.5 21m-6 0q-.625 0-1.075-.437T10.85 19.5q-.225-1.225-.787-2.262T8.65 15.35q-.85-.85-1.888-1.412T4.5 13.15q-.625-.125-1.062-.575T3 11.5q0-.65.45-1.075t1.075-.325q1.825.25 3.413 1.063t2.837 2.062q1.25 1.25 2.063 2.838t1.062 3.412q.1.625-.325 1.075T12.5 21"></path></svg>
+            {t.blogNavArchives}
+          </a>
+        </nav>
+
+        <!-- Recent Updates -->
+        <div>
+          <div class="blog-sidebar-section-title">{t.blogSidebarRecent}</div>
+          <div class="blog-sidebar-recent">
+            {recentPosts.map((post) => (
+              <a href={`${prefix}/${post.slug}`}>
+                {post.data.title}
+              </a>
+            ))}
+          </div>
         </div>
 
-        <!-- Back link -->
-        <div class="mt-12 pt-8 border-t border-gray-200">
-          <a href={backHref} class="text-base font-medium transition-colors" style={`color: ${siteConfig.personal.accentColor}`}>
-            {t.blogBack}
+        <!-- Social -->
+        <div class="blog-sidebar-social">
+          <a href="mailto:ouyyp5@mail2.sysu.edu.cn" aria-label="Email">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path><path d="M3 7l9 6l9 -6"></path></svg>
+          </a>
+          <a href="https://github.com/ouyangyipeng" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.928-.399 2.929-.399 1.001 0 2.007.134 2.929.399 3.293-1.552 3.301-1.23 3.301-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-3.807 5.624-5.479 5.919.43.372.823 1.102.823 2.222v3.293c0 .719.481 1.278 1.229 1.078 4.771-1.586 8.207-5.086 8.207-11.388 0-6.627-5.373-12-12-12z"></path></svg>
+          </a>
+          <a href="https://orcid.org/0009-0003-0544-4612" target="_blank" rel="noopener noreferrer" aria-label="ORCID">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.411c.525 0 .947.431.947.947s-.422.947-.947.947a.95.95 0 0 1-.947-.947c0-.525.422-.947.947-.947zm-.736 3.861h1.473v10.159H6.633V8.272zm3.947 0h3.947c3.736 0 5.473 2.625 5.473 5.078 0 2.625-1.847 5.078-5.473 5.078h-3.947V8.272zm1.473 1.578v7.922h2.474c2.105 0 3.473-1.578 3.473-3.947 0-2.263-1.368-3.947-3.473-3.947h-2.474z"></path></svg>
           </a>
         </div>
-      </article>
-    </main>
+      </aside>
 
-    <!-- Footer -->
-    <footer class="border-t border-gray-200 bg-gray-50 mt-16">
-      <div class="max-w-4xl mx-auto px-6 py-8 text-center">
-        <p class="text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} {siteConfig.personal.name}. {t.footerBuilt}
-        </p>
-      </div>
-    </footer>
+      <!-- Main Content -->
+      <main class="blog-main">
+        <!-- Top navbar -->
+        <div class="blog-topnav">
+          <a href={homePrefix} class="blog-topnav-home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Home
+          </a>
+          <a href={`${prefix}/`} class:list={[activeNav === "recent" && "active"]}>{t.blogNavRecent}</a>
+          <a href={`${prefix}/categories/`} class:list={[activeNav === "categories" && "active"]}>{t.blogNavCategories}</a>
+          <a href={`${prefix}/tags/`} class:list={[activeNav === "tags" && "active"]}>{t.blogNavTags}</a>
+          <a href={`${prefix}/archives/`} class:list={[activeNav === "archives" && "active"]}>{t.blogNavArchives}</a>
+        </div>
+
+        <slot />
+      </main>
+
+      <!-- Right Sidebar -->
+      <aside class="blog-right">
+        <!-- Site Stats -->
+        <div class="blog-widget">
+          <div class="blog-widget-title">{t.blogSidebarStats}</div>
+          <div class="blog-widget-stat">
+            <span>Posts</span>
+            <span class="blog-widget-stat-value">{totalPosts}</span>
+          </div>
+          <div class="blog-widget-stat">
+            <span>Categories</span>
+            <span class="blog-widget-stat-value">{categories.length}</span>
+          </div>
+          <div class="blog-widget-stat">
+            <span>Tags</span>
+            <span class="blog-widget-stat-value">{tags.length}</span>
+          </div>
+        </div>
+
+        <!-- Category Cloud -->
+        <div class="blog-widget">
+          <div class="blog-widget-title">{t.blogNavCategories}</div>
+          <div class="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <a href={`${prefix}/categories/${cat.toLowerCase()}`} class="tag-item">
+                {cat}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <!-- Tag Cloud -->
+        <div class="blog-widget">
+          <div class="blog-widget-title">{t.blogNavTags}</div>
+          <div class="tag-cloud">
+            {tags.map((tag) => (
+              <a href={`${prefix}/tags/${tag.toLowerCase()}`} class="tag-item">
+                {tag}
+              </a>
+            ))}
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Blog Footer -->
+    <div class="blog-footer">
+      <p>
+        {t.footerBuilt} · <a href={homePrefix}>{siteConfig.personal.name}</a>
+      </p>
+    </div>
   </body>
 </html>

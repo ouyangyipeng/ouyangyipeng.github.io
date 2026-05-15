@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6d28d9;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:0.05"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="#f9fafb"/>
+  <rect width="800" height="400" fill="url(#bg)"/>
+  <!-- Feature grid -->
+  <g transform="translate(400,170)">
+    <!-- Central hub -->
+    <circle cx="0" cy="0" r="30" fill="#6d28d9" opacity="0.5"/>
+    <text x="0" y="5" text-anchor="middle" font-family="monospace" font-size="14" fill="white" opacity="0.9">v1.3.7</text>
+    <!-- Feature nodes -->
+    <circle cx="-80" cy="-60" r="20" fill="#6d28d9" opacity="0.3"/>
+    <text x="-80" y="-55" text-anchor="middle" font-family="monospace" font-size="9" fill="#6d28d9" opacity="0.8">Typing</text>
+    <circle cx="80" cy="-60" r="20" fill="#6d28d9" opacity="0.3"/>
+    <text x="80" y="-55" text-anchor="middle" font-family="monospace" font-size="9" fill="#6d28d9" opacity="0.8">Pattern</text>
+    <circle cx="-80" cy="60" r="20" fill="#6d28d9" opacity="0.3"/>
+    <text x="-80" y="65" text-anchor="middle" font-family="monospace" font-size="9" fill="#6d28d9" opacity="0.8">HTTP</text>
+    <circle cx="80" cy="60" r="20" fill="#6d28d9" opacity="0.3"/>
+    <text x="80" y="65" text-anchor="middle" font-family="monospace" font-size="9" fill="#6d28d9" opacity="0.8">Jobs</text>
+    <!-- Connections -->
+    <line x1="0" y1="0" x2="-80" y2="-60" stroke="#6d28d9" stroke-width="2" opacity="0.3"/>
+    <line x1="0" y1="0" x2="80" y2="-60" stroke="#6d28d9" stroke-width="2" opacity="0.3"/>
+    <line x1="0" y1="0" x2="-80" y2="60" stroke="#6d28d9" stroke-width="2" opacity="0.3"/>
+    <line x1="0" y1="0" x2="80" y2="60" stroke="#6d28d9" stroke-width="2" opacity="0.3"/>
+  </g>
+  <text x="400" y="320" text-anchor="middle" font-family="monospace" font-size="24" fill="#6d28d9" opacity="0.8">16 Features, 1500+ Tests</text>
+</svg>

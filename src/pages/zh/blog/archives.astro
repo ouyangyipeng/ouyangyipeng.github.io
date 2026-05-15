@@ -1,0 +1,53 @@
+---
+import { getCollection } from "astro:content";
+import { getSiteConfig } from "../../../config";
+import { ui } from "../../../i18n/ui";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+
+const lang = "zh";
+const siteConfig = getSiteConfig(lang);
+const t = ui[lang];
+const prefix = "/zh/blog";
+
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Group by year
+const yearMap = new Map<number, Map<string, typeof allPosts>>();
+sortedPosts.forEach((post) => {
+  const year = post.data.pubDate.getFullYear();
+  const month = post.data.pubDate.toLocaleDateString("zh-CN", { month: "long" });
+  if (!yearMap.has(year)) yearMap.set(year, new Map());
+  const monthMap = yearMap.get(year)!;
+  if (!monthMap.has(month)) monthMap.set(month, []);
+  monthMap.get(month)!.push(post);
+});
+
+const years = [...yearMap.entries()].sort((a, b) => b[0] - a[0]);
+---
+
+<BlogLayout lang={lang} title={t.blogArchives} activeNav="archives">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">{t.blogArchives}</h1>
+    {years.map(([year, monthMap]) => (
+      <div>
+        <div class="archive-year">{year}</div>
+        {[...monthMap.entries()].map(([month, posts]) => (
+          <div>
+            <div class="archive-month">{month}</div>
+            {posts.map((post) => (
+              <a href={`${prefix}/${post.slug}`} class="archive-item">
+                <span class="archive-date">
+                  {post.data.pubDate.toLocaleDateString("zh-CN", { month: "short", day: "numeric" })}
+                </span>
+                <span class="archive-title">{post.data.title}</span>
+              </a>
+            ))}
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+</BlogLayout>

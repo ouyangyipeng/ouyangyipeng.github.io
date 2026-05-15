@@ -3,6 +3,8 @@ title: "The Birth of Nexa — Why the World Needs a Harness Native Agent Languag
 description: "Every AI developer knows the pain: prompt string concatenation, fragile JSON parsing, manual context management. We asked: what if agent safety was a language property?"
 pubDate: 2026-01-15
 tags: ["Vision", "Design", "Origin"]
+category: "Vision"
+cover: "/images/blog/conception.svg"
 ---
 
 Every AI developer knows the pain. You start a new project, excited to build something with LLMs. An hour later, you're drowning in prompt string concatenation, fragile JSON parsing, manual context window management, and a maze of framework abstractions that feel like they're fighting you at every turn.

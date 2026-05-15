@@ -2,9 +2,8 @@
 import { getCollection } from "astro:content";
 import { getSiteConfig } from "../../../config";
 import { ui } from "../../../i18n/ui";
-import Header from "../../../components/Header.astro";
-import Footer from "../../../components/Footer.astro";
-import "../../../styles/global.css";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+import PostCard from "../../../components/blog/PostCard.astro";
 
 const lang = "zh";
 const siteConfig = getSiteConfig(lang);
@@ -16,62 +15,19 @@ const sortedPosts = allPosts.sort(
 );
 ---
 
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={`${siteConfig.personal.name} 的博客`} />
-    <title>{t.blogTitle} — {siteConfig.personal.name}</title>
-  </head>
-  <body class="min-h-screen bg-white">
-    <Header lang={lang} />
-
-    <main class="max-w-3xl mx-auto px-6 pt-32 pb-16">
-      <!-- Blog header -->
-      <div class="mb-16 border-b border-gray-200 pb-8">
-        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900">{t.blogTitle}</h1>
-        <p class="mt-4 text-lg text-gray-500">{t.blogDesc}</p>
-      </div>
-
-      <!-- Posts timeline -->
-      <div class="space-y-12">
-        {sortedPosts.map((post) => (
-          <article class="group">
-            <a href={`/zh/blog/${post.slug}`} class="block">
-              <div class="flex items-baseline gap-4 mb-2">
-                <time class="text-sm font-medium text-gray-400 tabular-nums" datetime={post.data.pubDate.toISOString()}>
-                  {post.data.pubDate.toLocaleDateString("zh-CN", { year: "numeric", month: "short", day: "numeric" })}
-                </time>
-              </div>
-              <h2 class="text-2xl font-bold text-gray-900 group-hover:text-gray-600 transition-colors leading-snug">
-                {post.data.title}
-              </h2>
-              <p class="mt-2 text-gray-500 leading-relaxed">
-                {post.data.description}
-              </p>
-              {post.data.tags && post.data.tags.length > 0 && (
-                <div class="mt-3 flex flex-wrap gap-2">
-                  {post.data.tags.map((tag: string) => (
-                    <span class="px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-500">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </a>
-          </article>
-        ))}
-      </div>
-
-      {sortedPosts.length === 0 && (
-        <div class="text-center py-16">
-          <p class="text-lg text-gray-400">暂无文章，敬请期待。</p>
-        </div>
-      )}
-    </main>
-
-    <Footer lang={lang} />
-  </body>
-</html>
+<BlogLayout lang={lang} title={t.blogTitle} activeNav="recent">
+  <div>
+    {sortedPosts.map((post) => (
+      <PostCard
+        title={post.data.title}
+        description={post.data.description}
+        pubDate={post.data.pubDate}
+        category={post.data.category}
+        tags={post.data.tags}
+        cover={post.data.cover}
+        slug={post.slug}
+        lang={lang}
+      />
+    ))}
+  </div>
+</BlogLayout>

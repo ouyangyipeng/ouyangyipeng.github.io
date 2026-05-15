@@ -8,8 +8,9 @@ const blogCollection = defineCollection({
     pubDate: z.date(),
     updatedDate: z.date().optional(),
     tags: z.array(z.string()).optional(),
+    category: z.string().default("Uncategorized"),
     draft: z.boolean().default(false),
-    image: z.string().optional(),
+    cover: z.string().optional(),
   }),
 });
 

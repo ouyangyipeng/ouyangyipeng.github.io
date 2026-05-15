@@ -3,6 +3,8 @@ title: "Nexa Goes Open Source — v0.9-alpha Release"
 description: "After months of stealth development, Nexa v0.9-alpha is now available under AGPL-3.0 on GitHub — with a working transpiler, 10+ examples, and a growing community."
 pubDate: 2026-03-10
 tags: ["Open Source", "v0.9", "Community"]
+category: "Open Source"
+cover: "/images/blog/opensource.svg"
 ---
 
 Today, we're opening the doors. After two months of intense development, **Nexa v0.9-alpha is now open source** under the GNU Affero General Public License v3.0 (AGPL-3.0).

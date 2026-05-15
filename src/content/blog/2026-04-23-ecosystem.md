@@ -3,6 +3,8 @@ title: "v1.3.7 Milestone — 16 Features, 1,500+ Tests"
 description: "From gradual typing to pattern matching, from background jobs to HTTP servers — Nexa v1.3.7 ships with 16 major features and a battle-tested test suite."
 pubDate: 2026-04-23
 tags: ["v1.3.7", "Release", "Features"]
+category: "Release"
+cover: "/images/blog/ecosystem.svg"
 ---
 
 Today marks a major milestone for Nexa. With the release of **v1.3.7**, we've shipped **16 major features** across 7 minor versions, backed by **1,500+ tests**. Nexa has grown from a simple agent DSL into a full-featured programming language for autonomous systems.

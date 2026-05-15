@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6d28d9;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:0.05"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="#f9fafb"/>
+  <rect width="800" height="400" fill="url(#bg)"/>
+  <!-- Code/terminal icon -->
+  <g transform="translate(400,160)">
+    <rect x="-120" y="-80" width="240" height="160" rx="8" fill="#1e1e2e" opacity="0.9"/>
+    <rect x="-120" y="-80" width="240" height="24" rx="8" fill="#6d28d9" opacity="0.3"/>
+    <circle cx="-100" cy="-68" r="4" fill="#f38ba8" opacity="0.8"/>
+    <circle cx="-88" cy="-68" r="4" fill="#a6e3a9" opacity="0.8"/>
+    <circle cx="-76" cy="-68" r="4" fill="#f9e2af" opacity="0.8"/>
+    <!-- Code lines -->
+    <text x="-100" y="-30" font-family="monospace" font-size="12" fill="#cdd6f4" opacity="0.9">// Nexa transpiler</text>
+    <text x="-100" y="-10" font-family="monospace" font-size="12" fill="#a6e3a9" opacity="0.9">fn</text>
+    <text x="-70" y="-10" font-family="monospace" font-size="12" fill="#cdd6f4" opacity="0.9"> transform(ast):</text>
+    <text x="-100" y="10" font-family="monospace" font-size="12" fill="#89b4fa" opacity="0.9">  score = ambiguity(ast)</text>
+    <text x="-100" y="30" font-family="monospace" font-size="12" fill="#cdd6f4" opacity="0.9">  return</text>
+    <text x="-50" y="30" font-family="monospace" font-size="12" fill="#f9e2af" opacity="0.9"> generate(score)</text>
+  </g>
+  <text x="400" y="320" text-anchor="middle" font-family="monospace" font-size="24" fill="#6d28d9" opacity="0.8">From Zero to MVP</text>
+</svg>

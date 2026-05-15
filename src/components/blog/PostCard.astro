@@ -1,0 +1,63 @@
+---
+import type { Lang } from "../../config/types";
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  category: string;
+  tags?: string[];
+  cover?: string;
+  slug: string;
+  lang: Lang;
+}
+
+const { title, description, pubDate, category, tags, cover, slug, lang } = Astro.props;
+const prefix = lang === "zh" ? "/zh/blog" : "/blog";
+const locale = lang === "zh" ? "zh-CN" : "en-US";
+
+const categoryClass = `cat-${category.toLowerCase().replace(/\s+/g, "-")}`;
+
+const formattedDate = pubDate.toLocaleDateString(locale, {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+---
+
+{cover ? (
+  <!-- Cover card -->
+  <a href={`${prefix}/${slug}`} class="post-card">
+    <div class="post-card-cover">
+      <img src={cover} alt={title} loading="lazy" />
+      <div class="post-card-cover-overlay">
+        <div class="post-card-cover-title">{title}</div>
+        <div class="post-card-cover-desc">{description}</div>
+      </div>
+    </div>
+    <div class="post-card-plain" style="padding: 12px 20px;">
+      <div class="post-card-meta">
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        <span class:list={[categoryClass, "post-card-category"]}>{category}</span>
+        {tags && tags.length > 0 && tags.slice(0, 2).map((tag) => (
+          <span class="text-xs text-gray-400">#{tag}</span>
+        ))}
+      </div>
+    </div>
+  </a>
+) : (
+  <!-- Plain card -->
+  <a href={`${prefix}/${slug}`} class="post-card">
+    <div class="post-card-plain">
+      <div class="post-card-title">{title}</div>
+      <div class="post-card-excerpt">{description}</div>
+      <div class="post-card-meta">
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        <span class:list={[categoryClass, "post-card-category"]}>{category}</span>
+        {tags && tags.length > 0 && tags.slice(0, 3).map((tag) => (
+          <span class="text-xs text-gray-400">#{tag}</span>
+        ))}
+      </div>
+    </div>
+  </a>
+)}

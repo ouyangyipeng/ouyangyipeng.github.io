@@ -80,7 +80,7 @@ src/config/
 - `actions/upload-pages-artifact@v3` + `actions/deploy-pages@v4` 部署
 - 触发条件：push to main + manual workflow_dispatch
 
-#### 7. 自定义域名 — author.nexa-lang.com
+#### 7. 自定义域名 — oyyp.nexa-lang.com
 
 **决策**: 通过 `public/CNAME` 文件配置，`astro.config.mjs` 中 `site` 字段设置为对应 URL。
 
@@ -134,6 +134,7 @@ Hero → About → Nexa Project → Research → Experience → Projects → Edu
 3. **pnpm-workspace.yaml 缺少 packages 字段**: `pnpm/action-setup@v4` 报错。修复：添加 `packages: ["."]`。
 4. **@fontsource 导入路径错误**: `@fontsource/ibm-plex-mono/400` 和 `/800` 不存在。修复：使用 `latin-400`/`latin-500`/`latin-600`/`latin-700` 格式，移除 800 weight（IBM Plex Mono 无此 weight）。
 5. **GitHub Pages 缺少 `.nojekyll` 导致 CSS 丢失**: GitHub Pages 默认使用 Jekyll 处理，Jekyll 会忽略所有以 `_` 开头的目录（如 `_astro`），导致 CSS 文件 `/_astro/*.css` 无法被加载。Blog 页面因无内联样式而显示为纯文本。修复：在 `public/` 目录添加空文件 `.nojekyll`，Astro 构建时自动复制到 `dist/`，告诉 GitHub Pages 跳过 Jekyll 处理。
+6. **Blog 页面深层路径 import 错误**: `blog/categories/[category].astro` 和 `blog/tags/[tag].astro` 在 3 层深度目录，使用 `../../` 而非 `../../../` 导致 Rollup 无法解析模块。修复：根据实际目录深度调整相对路径。
 
 ---
 
@@ -153,12 +154,39 @@ Hero → About → Nexa Project → Research → Experience → Projects → Edu
 
 ---
 
+## 变更记录 v2 — Blog 重构 + 域名变更
+
+### 域名变更
+- `author.nexa-lang.com` → `oyyp.nexa-lang.com`
+- 更新 CNAME、astro.config.mjs、personal.ts、nexa.ts 中所有硬编码引用
+
+### Blog 独立化 (Stellar 风格)
+- Blog 不再共享主页 Header/Footer，使用独立 `BlogLayout.astro`
+- 左侧边栏：头像 + 博客名 + 导航菜单 + 最近更新 + 社交链接
+- 右侧边栏：网站统计 + 分类云 + 标签云
+- 顶栏导航：近期发布 / 分类 / 标签 / 归档 + 返回主页
+- 移动端响应式：隐藏侧边栏，显示移动端顶栏
+
+### Blog 功能升级
+- 新增分类页 (`/blog/categories/`, `/blog/categories/[category]/`)
+- 新增标签页 (`/blog/tags/`, `/blog/tags/[tag]/`)
+- 新增归档页 (`/blog/archives/`)
+- 文章卡片支持封面图和普通两种样式
+- Content Schema 扩展：`category` (string) + `cover` (string) 字段
+- 5 篇博客文章添加 category 和 cover frontmatter
+- 5 个封面 SVG 图片 (`/images/blog/*.svg`)
+
+### 构建结果
+- 60 页面，0 错误，构建时间 ~2s
+
+---
+
 ## 待办 / 未来改进
 
 - [ ] 添加 RSS feed（Astro 官方 `@astrojs/rss` 集成）
 - [ ] 添加 SEO 优化（sitemap, open-graph tags）
 - [ ] 添加暗色模式切换
-- [ ] 博客标签分类/筛选功能
+- [x] 博客标签分类/筛选功能
 - [ ] 项目详情子页面（点击项目卡片进入详情）
 - [ ] 论文详情子页面（PDF 链接、abstract 展示）
 - [ ] 响应式优化（移动端体验改进）
