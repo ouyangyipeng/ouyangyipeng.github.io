@@ -29,7 +29,7 @@ const formattedDate = pubDate.toLocaleDateString(locale, {
   <!-- Cover card -->
   <a href={`${prefix}/${slug}`} class="post-card">
     <div class="post-card-cover">
-      <img src={cover} alt={title} loading="lazy" />
+      <img src={cover} alt={title} loading="lazy" decoding="async" />
       <div class="post-card-cover-overlay">
         <div class="post-card-cover-title">{title}</div>
         <div class="post-card-cover-desc">{description}</div>
@@ -40,7 +40,7 @@ const formattedDate = pubDate.toLocaleDateString(locale, {
         <time datetime={pubDate.toISOString()}>{formattedDate}</time>
         <span class:list={[categoryClass, "post-card-category"]}>{category}</span>
         {tags && tags.length > 0 && tags.slice(0, 2).map((tag) => (
-          <span class="text-xs text-gray-400">#{tag}</span>
+          <span class="text-xs opacity-60">#{tag}</span>
         ))}
       </div>
     </div>
@@ -55,7 +55,7 @@ const formattedDate = pubDate.toLocaleDateString(locale, {
         <time datetime={pubDate.toISOString()}>{formattedDate}</time>
         <span class:list={[categoryClass, "post-card-category"]}>{category}</span>
         {tags && tags.length > 0 && tags.slice(0, 3).map((tag) => (
-          <span class="text-xs text-gray-400">#{tag}</span>
+          <span class="text-xs opacity-60">#{tag}</span>
         ))}
       </div>
     </div>

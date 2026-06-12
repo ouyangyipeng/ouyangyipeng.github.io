@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import { getSiteConfig } from "../config";
 import { ui } from "../i18n/ui";
 import type { Lang } from "../config/types";
+import ThemeToggle from "../components/ThemeToggle.astro";
 import "../styles/global.css";
 import "../styles/blog.css";
 
@@ -29,6 +30,9 @@ const recentPosts = sortedPosts.slice(0, 5);
 const totalPosts = allPosts.length;
 const categories = [...new Set(allPosts.map((p) => p.data.category))];
 const tags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
+
+// Canonical URL
+const canonicalUrl = `https://oyyp.nexa-lang.com${prefix}`;
 ---
 
 <html lang={lang === "zh" ? "zh-CN" : "en"}>
@@ -39,6 +43,28 @@ const tags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description || `${t.blogTitle} by ${siteConfig.personal.name}`} />
     <title>{title} — {siteConfig.personal.name}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={`${title} — ${siteConfig.personal.name}`} />
+    <meta property="og:description" content={description || `${t.blogTitle} by ${siteConfig.personal.name}`} />
+    <meta property="og:image" content={`${canonicalUrl}/images/nexa-logo.svg`} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={`${title} — ${siteConfig.personal.name}`} />
+    <meta name="twitter:description" content={description || `${t.blogTitle} by ${siteConfig.personal.name}`} />
+
+    <!-- Alternate language -->
+    <link rel="alternate" hreflang="en" href="https://oyyp.nexa-lang.com/blog" />
+    <link rel="alternate" hreflang="zh-CN" href="https://oyyp.nexa-lang.com/zh/blog" />
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="Yipeng Ouyang — Blog" href="https://oyyp.nexa-lang.com/rss.xml" />
+
+    <!-- Theme color for dark mode -->
+    <meta name="color-scheme" content="light dark" />
   </head>
   <body class="min-h-screen bg-gray-50">
     <!-- Mobile header (hidden on desktop) -->
@@ -125,6 +151,9 @@ const tags = [...new Set(allPosts.flatMap((p) => p.data.tags || []))];
           <a href={`${prefix}/categories/`} class:list={[activeNav === "categories" && "active"]}>{t.blogNavCategories}</a>
           <a href={`${prefix}/tags/`} class:list={[activeNav === "tags" && "active"]}>{t.blogNavTags}</a>
           <a href={`${prefix}/archives/`} class:list={[activeNav === "archives" && "active"]}>{t.blogNavArchives}</a>
+          <div class="ml-auto">
+            <ThemeToggle size="md" />
+          </div>
         </div>
 
         <slot />

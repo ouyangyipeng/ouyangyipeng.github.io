@@ -1,6 +1,7 @@
 ---
 import { ui } from "../i18n/ui";
 import type { Lang } from "../config/types";
+import ThemeToggle from "./ThemeToggle.astro";
 
 interface Props {
   lang: Lang;
@@ -82,7 +83,8 @@ const altPath = altLang === "en" ? "/" : "/zh/";
           {t.navBlog}
         </a>
       </li>
-      <li class="ml-4">
+      <li class="ml-4 flex items-center gap-3">
+        <ThemeToggle size="md" />
         <a
           href={altPath}
           class="px-3 py-1 rounded-full text-sm font-bold border-2 transition-colors duration-300"
@@ -100,10 +102,12 @@ const altPath = altLang === "en" ? "/" : "/zh/";
   if (header) {
     window.addEventListener("scroll", () => {
       if (window.scrollY > 50) {
-        header.classList.add("bg-white/80", "backdrop-blur-md", "shadow-sm");
+        header.classList.add("backdrop-blur-md", "shadow-sm");
+        header.style.backgroundColor = "var(--header-bg, rgba(255, 255, 255, 0.8))";
         header.classList.remove("bg-transparent");
       } else {
-        header.classList.remove("bg-white/80", "backdrop-blur-md", "shadow-sm");
+        header.classList.remove("backdrop-blur-md", "shadow-sm");
+        header.style.backgroundColor = "transparent";
         header.classList.add("bg-transparent");
       }
     });

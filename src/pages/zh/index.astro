@@ -1,4 +1,5 @@
 ---
+import { getSiteConfig } from "../../config";
 import Header from "../../components/Header.astro";
 import Hero from "../../components/Hero.astro";
 import About from "../../components/About.astro";
@@ -12,6 +13,8 @@ import Footer from "../../components/Footer.astro";
 import "../../styles/global.css";
 
 const lang = "zh";
+const siteConfig = getSiteConfig(lang);
+const canonicalUrl = "https://oyyp.nexa-lang.com/zh/";
 ---
 
 <html lang="zh-CN">
@@ -20,7 +23,30 @@ const lang = "zh";
     <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>欧阳易芃 - 计算机科学学生 · Agentic Systems · SysML</title>
+    <title>欧阳易芃 — 计算机科学本科生 · Agentic Systems · AI Infrastructure</title>
+    <meta name="description" content={siteConfig.personal.description} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content="欧阳易芃 — 计算机科学本科生 · Agentic Systems · AI Infrastructure" />
+    <meta property="og:description" content={siteConfig.personal.description} />
+    <meta property="og:image" content="https://oyyp.nexa-lang.com/images/nexa-logo.svg" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="欧阳易芃 — 计算机科学本科生 · Agentic Systems · AI Infrastructure" />
+    <meta name="twitter:description" content={siteConfig.personal.description} />
+
+    <!-- Alternate language -->
+    <link rel="alternate" hreflang="en" href="https://oyyp.nexa-lang.com" />
+    <link rel="alternate" hreflang="zh-CN" href={canonicalUrl} />
+
+    <!-- RSS -->
+    <link rel="alternate" type="application/rss+xml" title="欧阳易芃 — 博客" href="https://oyyp.nexa-lang.com/rss.xml" />
+
+    <!-- Theme color for dark mode -->
+    <meta name="color-scheme" content="light dark" />
   </head>
   <body>
     <Header lang={lang} />
