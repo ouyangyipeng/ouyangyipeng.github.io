@@ -2,6 +2,18 @@
 
 > 记录项目构建过程中的设计思路、决策过程和变更点。
 
+## 2026-10-19 — 中英文主页内容更新
+
+- 保留 Astro、现有视觉风格、路由与部署方式，更新 `src/config/` 中的个人简介、研究、经历、项目、教育与奖项。
+- 研究定位聚焦 AgentSys、MLSys 与底层性能优化；补充字节跳动研发实习、教学及学生服务经历。
+- 精选项目更新为 Nexa、SLIM-ARC、ASCEND-OK、DS-Harness Desktop、DSH Marketplace、YatCC-AI、OYOS 和 SYSU-CS-baoyan。
+- 按本人确认，仅 SkCC 标注已录用，会议名称为 ACM CAIS 2026 — AgentSkills'26 Workshop；RAMP 标注 HPC Asia 2027 在投，保留公开预印本及完整作者列表。SkillCompiler 与 SkCC 在同一条研究记录中说明版本关系，YatCC-AI 以项目与教学成果展示。
+- 按本人确认，简介、教育及页面元数据统一使用中山大学计算机学院计算机科学与技术专业 2027 级学术型硕士身份；另列本科教育及预计毕业时间，GPA 和历史排名归于本科经历。
+- 补充 2026 系统能力大赛与教学案例奖项；国家奖学金及本学年校一等奖学金注明现有公示状态；GPA 使用学校原始 5 分制口径。
+- 置顶研究卡片展示已有 `contribution` 字段，状态标签保持单行，避免长论文标题将“在投”挤成两行；主页标题及社交分享标题统一读取个人配置，保持中英文信息一致。
+- 修复已有 MoE 报告缺少 frontmatter 导致整站构建失败的问题；保留正文、按原上传日期补齐元数据并标记为草稿，待单独确认发表。
+- 公开资料参考：[SkCC](https://arxiv.org/abs/2605.03353)、[RAMP](https://arxiv.org/abs/2605.27492)、[ASCEND-OK](https://github.com/ouyangyipeng/ASCEND-OK)、[DS-Harness Desktop](https://github.com/ouyangyipeng/dsh-desktop)、[DSH Marketplace](https://github.com/ouyangyipeng/dsh-marketplace)、[SYSU-CS-baoyan](https://github.com/ouyangyipeng/SYSU-CS-baoyan)。
+
 ---
 
 ## V1.0 — 初始构建 (2026-05-14)

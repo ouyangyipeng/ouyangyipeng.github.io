@@ -4,7 +4,7 @@ const configs: Record<Lang, NexaConfig> = {
   en: {
     homepage: "https://www.nexa-lang.com",
     intro:
-      "Nexa is the first Harness Native Agent Language — where agent safety is enforced by the compiler, not by runtime frameworks. Write flows, not glue code. 16+ features, 1,500+ tests, Rust AVM runtime with WASM sandboxing.",
+      "Nexa is a domain-specific language for agent workflows. It represents models, tools, context, and execution constraints in the language, combining compile-time checks with runtime support. The project includes a Python runtime, a Rust Agent Virtual Machine, and WASM sandbox integration.",
     links: [
       {
         name: "Documentation",
@@ -14,7 +14,7 @@ const configs: Record<Lang, NexaConfig> = {
       },
       {
         name: "SkCC",
-        description: "Skills Compiler — compile agent skills into optimized runtime modules.",
+        description: "Research on portable skill compilation across agent frameworks.",
         url: "https://skcc.nexa-lang.com/",
         icon: "🔧",
       },
@@ -36,12 +36,6 @@ const configs: Record<Lang, NexaConfig> = {
         url: "https://github.com/Nexa-Language",
         icon: "🏛️",
       },
-      {
-        name: "Author",
-        description: "Owen — creator of the Nexa language and Harness Native methodology.",
-        url: "https://oyyp.nexa-lang.com/",
-        icon: "👤",
-      },
     ],
     github: "https://github.com/Nexa-Language/Nexa",
     paper: "https://doi.org/10.5281/zenodo.19994263",
@@ -50,7 +44,7 @@ const configs: Record<Lang, NexaConfig> = {
   zh: {
     homepage: "https://www.nexa-lang.com",
     intro:
-      "Nexa 是首个 Harness Native Agent Language — 由编译器而非运行时框架强制保障 Agent 安全。写流程，不写胶水代码。16+ 特性，1,500+ 测试，Rust AVM 运行时 + WASM 沙箱。",
+      "Nexa 是面向智能体工作流的领域特定语言，将模型、工具、上下文与执行约束纳入语言结构，结合编译期检查与运行时支持。项目包含 Python 运行时、Rust Agent Virtual Machine，以及 WASM 沙箱集成。",
     links: [
       {
         name: "文档",
@@ -60,7 +54,7 @@ const configs: Record<Lang, NexaConfig> = {
       },
       {
         name: "SkCC",
-        description: "技能编译器 — 将 Agent 技能编译为优化的运行时模块。",
+        description: "研究跨智能体框架的可移植技能编译。",
         url: "https://skcc.nexa-lang.com/",
         icon: "🔧",
       },
@@ -81,12 +75,6 @@ const configs: Record<Lang, NexaConfig> = {
         description: "GitHub 组织，包含所有 Nexa 项目与仓库。",
         url: "https://github.com/Nexa-Language",
         icon: "🏛️",
-      },
-      {
-        name: "作者",
-        description: "Owen — Nexa 语言与 Harness Native 方法论的创建者。",
-        url: "https://oyyp.nexa-lang.com/",
-        icon: "👤",
       },
     ],
     github: "https://github.com/Nexa-Language/Nexa",

@@ -1,3 +1,12 @@
+---
+title: "2026 年受限内存与 CPU 场景下稀疏混合专家模型（MoE）推理加速技术研究报告"
+description: "受限内存与 CPU 场景下 MoE 推理的瓶颈、异构卸载、缓存管理与优化方向。"
+pubDate: 2026-07-18
+category: "Research"
+tags: ["MoE", "MLSys", "Inference"]
+draft: true
+---
+
 # 2026年受限内存与CPU场景下稀疏混合专家模型（MoE）推理加速技术研究报告
 
 ## 边缘端与本地部署中MoE架构的性能鸿沟与物理瓶颈
