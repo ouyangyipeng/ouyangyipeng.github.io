@@ -37,7 +37,7 @@ const otherPapers = siteConfig.research.filter((p) => !p.pinned);
                 <div class="flex flex-wrap gap-2">
                   {paper.status && (
                     <span
-                      class={`px-3 py-1 rounded-full text-xs font-bold ${
+                      class={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
                         paper.status === "accepted"
                           ? "bg-green-100 text-green-800"
                           : paper.status === "submitting"
@@ -68,6 +68,11 @@ const otherPapers = siteConfig.research.filter((p) => !p.pinned);
               {paper.myRole && (
                 <p class="text-sm font-medium mb-2" style={`color: ${siteConfig.personal.accentColor}`}>
                   {paper.myRole}
+                </p>
+              )}
+              {paper.contribution && (
+                <p class="text-sm text-gray-500 mb-3 leading-6">
+                  {paper.contribution}
                 </p>
               )}
               {paper.creditRoles && paper.creditRoles.length > 0 && (
@@ -118,7 +123,7 @@ const otherPapers = siteConfig.research.filter((p) => !p.pinned);
               <div class="flex flex-wrap gap-2">
                 {paper.status && (
                   <span
-                    class={`px-2 py-1 rounded-full text-xs font-bold ${
+                    class={`px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
                       paper.status === "accepted"
                         ? "bg-green-100 text-green-800"
                         : paper.status === "submitting"
