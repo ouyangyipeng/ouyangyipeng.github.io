@@ -1,0 +1,285 @@
+<hero-particles aria-hidden="true" data-animation="paused">
+  <canvas></canvas>
+</hero-particles>
+
+<style>
+  hero-particles {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: linear-gradient(to bottom, transparent, black 12%, black 76%, transparent);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  interface Particle {
+    x: number;
+    y: number;
+    radius: number;
+    opacity: number;
+    speed: number;
+    phase: number;
+    cool: boolean;
+  }
+
+  class HeroParticles extends HTMLElement {
+    private canvas: HTMLCanvasElement | null = null;
+    private context: CanvasRenderingContext2D | null = null;
+    private events: AbortController | null = null;
+    private resizeObserver: ResizeObserver | null = null;
+    private intersectionObserver: IntersectionObserver | null = null;
+    private themeObserver: MutationObserver | null = null;
+    private readonly reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    private particles: Particle[] = [];
+    private frame: number | null = null;
+    private previousTime = 0;
+    private elapsed = 0;
+    private width = 0;
+    private height = 0;
+    private color = "139 92 246";
+    private secondaryColor = "75 132 226";
+    private glowOpacity = 0.14;
+    private visible = false;
+    private pointer = { x: 0, y: 0, active: false };
+    private offset = { x: 0, y: 0 };
+    private glow = { x: 0, y: 0, tailX: 0, tailY: 0, presence: 0, energy: 0 };
+
+    connectedCallback(): void {
+      this.canvas = this.querySelector("canvas");
+      this.context = this.canvas?.getContext("2d") ?? null;
+      if (!this.context || this.events) return;
+
+      this.events = new AbortController();
+      const { signal } = this.events;
+      document.addEventListener("visibilitychange", this.syncAnimation, { signal });
+      document.addEventListener("themechange", this.refreshColor, { signal });
+      window.addEventListener("resize", this.resize, { passive: true, signal });
+      this.reducedMotion.addEventListener("change", this.syncAnimation, { signal });
+      this.parentElement?.addEventListener("pointermove", this.movePointer, { passive: true, signal });
+      this.parentElement?.addEventListener("pointerleave", this.clearPointer, { signal });
+      window.addEventListener("blur", this.clearPointer, { signal });
+
+      this.resizeObserver = new ResizeObserver(this.resize);
+      this.resizeObserver.observe(this);
+      this.intersectionObserver = new IntersectionObserver(([entry]) => {
+        this.visible = entry?.isIntersecting ?? false;
+        this.syncAnimation();
+      });
+      this.intersectionObserver.observe(this);
+      this.themeObserver = new MutationObserver(this.refreshColor);
+      this.themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class", "data-theme", "style"],
+      });
+      this.refreshColor();
+      this.resize();
+    }
+
+    disconnectedCallback(): void {
+      this.stop();
+      this.events?.abort();
+      this.events = null;
+      this.resizeObserver?.disconnect();
+      this.intersectionObserver?.disconnect();
+      this.themeObserver?.disconnect();
+      this.visible = false;
+      this.resetPointer();
+    }
+
+    private refreshColor = (): void => {
+      const style = getComputedStyle(this);
+      const color = style.getPropertyValue("--particle-color").trim();
+      this.color = color.replaceAll(",", " ") || "139 92 246";
+      this.secondaryColor = style.getPropertyValue("--particle-secondary").trim().replaceAll(",", " ") || "75 132 226";
+      this.glowOpacity = Number.parseFloat(style.getPropertyValue("--pointer-glow-opacity")) || 0.14;
+      this.draw();
+    };
+
+    private resize = (): void => {
+      if (!this.canvas || !this.context) return;
+      const { width, height } = this.getBoundingClientRect();
+      const scale = Math.min(window.devicePixelRatio || 1, 2);
+      this.width = width;
+      this.height = height;
+      this.canvas.width = Math.round(width * scale);
+      this.canvas.height = Math.round(height * scale);
+      this.context.setTransform(scale, 0, 0, scale, 0, 0);
+      this.resetPointer();
+      this.createParticles();
+      this.draw();
+      this.syncAnimation();
+    };
+
+    private createParticles(): void {
+      const mobile = this.width < 768;
+      const count = mobile
+        ? Math.min(42, Math.max(24, Math.floor(this.width * this.height / 10000)))
+        : Math.min(160, Math.max(72, Math.floor(this.width * this.height / 6500)));
+      const random = (seed: number): number => {
+        const value = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
+        return value - Math.floor(value);
+      };
+      this.particles = Array.from({ length: count }, (_, index) => ({
+        x: 0.04 + random(index * 6) * 0.98,
+        y: random(index * 6 + 1),
+        radius: 0.6 + random(index * 6 + 2) * 1.1,
+        opacity: 0.28 + random(index * 6 + 3) * 0.42,
+        speed: 0.6 + random(index * 6 + 4) * 1.2,
+        phase: random(index * 6 + 5) * Math.PI * 2,
+        cool: index % 3 === 0,
+      }));
+      this.dataset.particleCount = String(count);
+    }
+
+    private movePointer = (event: PointerEvent): void => {
+      if (event.pointerType !== "mouse" || this.reducedMotion.matches) return;
+      const rect = this.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      if (!this.pointer.active) {
+        this.glow.x = this.glow.tailX = x;
+        this.glow.y = this.glow.tailY = y;
+      } else {
+        const distance = Math.hypot(x - this.pointer.x, y - this.pointer.y);
+        this.glow.energy = Math.min(1, this.glow.energy + distance / 240);
+      }
+      this.pointer = { x, y, active: true };
+      this.dataset.pointer = "active";
+    };
+
+    private clearPointer = (): void => {
+      this.pointer.active = false;
+      this.dataset.pointer = "idle";
+    };
+
+    private resetPointer(): void {
+      this.clearPointer();
+      this.glow.presence = 0;
+      this.glow.energy = 0;
+    }
+
+    private stop(): void {
+      if (this.frame !== null) cancelAnimationFrame(this.frame);
+      this.frame = null;
+      this.previousTime = 0;
+      this.dataset.animation = "paused";
+    }
+
+    private syncAnimation = (): void => {
+      this.stop();
+      if (this.reducedMotion.matches) {
+        this.dataset.animation = "reduced";
+        this.offset = { x: 0, y: 0 };
+        this.resetPointer();
+        this.draw();
+        return;
+      }
+      if (!this.visible || document.hidden || !this.width || !this.height || !this.isConnected) {
+        this.resetPointer();
+        this.draw();
+        return;
+      }
+      this.dataset.animation = "running";
+      this.frame = requestAnimationFrame(this.tick);
+    };
+
+    private tick = (time: number): void => {
+      this.frame = null;
+      if (!this.previousTime) this.previousTime = time;
+      const delta = time - this.previousTime;
+      // Give pointer interaction a smoother cadence; idle decoration can paint less often.
+      const frameInterval = 1000 / (this.pointer.active || this.glow.presence > 0.01 ? 60 : 30);
+      if (delta >= frameInterval) {
+        this.elapsed += Math.min(delta, 100) / 1000;
+        this.previousTime = time;
+        this.draw();
+      }
+      this.frame = requestAnimationFrame(this.tick);
+    };
+
+    private draw(): void {
+      const context = this.context;
+      if (!context || !this.width || !this.height) return;
+      context.clearRect(0, 0, this.width, this.height);
+      const targetX = this.pointer.active ? (this.pointer.x / this.width - 0.5) * 8 : 0;
+      const targetY = this.pointer.active ? (this.pointer.y / this.height - 0.5) * 8 : 0;
+      this.offset.x += (targetX - this.offset.x) * 0.07;
+      this.offset.y += (targetY - this.offset.y) * 0.07;
+      this.glow.x += (this.pointer.x - this.glow.x) * 0.12;
+      this.glow.y += (this.pointer.y - this.glow.y) * 0.12;
+      this.glow.tailX += (this.glow.x - this.glow.tailX) * 0.06;
+      this.glow.tailY += (this.glow.y - this.glow.tailY) * 0.06;
+      this.glow.presence += ((this.pointer.active ? 1 : 0) - this.glow.presence) * 0.08;
+      this.glow.energy *= 0.94;
+      this.drawGlow(context);
+      for (const particle of this.particles) this.drawParticle(context, particle);
+    }
+
+    private drawGlow(context: CanvasRenderingContext2D): void {
+      if (this.glow.presence < 0.005) return;
+      const radius = Math.min(360, this.width * 0.34);
+      const alpha = this.glowOpacity * this.glow.presence;
+      const layers = [
+        { x: this.glow.tailX - 45, y: this.glow.tailY + 35, color: this.secondaryColor, radius: radius * 1.15, alpha: alpha * 0.7 },
+        { x: this.glow.x, y: this.glow.y, color: this.color, radius, alpha },
+      ];
+      for (const layer of layers) {
+        const gradient = context.createRadialGradient(layer.x, layer.y, 0, layer.x, layer.y, layer.radius);
+        gradient.addColorStop(0, `rgb(${layer.color} / ${layer.alpha})`);
+        gradient.addColorStop(0.45, `rgb(${layer.color} / ${layer.alpha * 0.4})`);
+        gradient.addColorStop(1, `rgb(${layer.color} / 0)`);
+        context.fillStyle = gradient;
+        context.fillRect(layer.x - layer.radius, layer.y - layer.radius, layer.radius * 2, layer.radius * 2);
+      }
+    }
+
+    private drawParticle(context: CanvasRenderingContext2D, particle: Particle): void {
+      const { width, height, elapsed } = this;
+      let x = particle.x * width + Math.sin(elapsed * 0.08 + particle.phase) * 16 + this.offset.x;
+      let y = ((particle.y * height - elapsed * particle.speed) % height + height) % height + this.offset.y;
+      let influence = 0;
+      if (this.glow.presence > 0.005) {
+        const dx = x - this.glow.x;
+        const dy = y - this.glow.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance > 0 && distance < 220) {
+          influence = (1 - distance / 220) ** 2 * this.glow.presence;
+          const force = influence * (28 + this.glow.energy * 26);
+          x += (dx - dy * 0.45) / distance * force;
+          y += (dy + dx * 0.45) / distance * force;
+        }
+      }
+      const edgeFade = Math.min(1, y / 60, (height - y) / 100);
+      const presence = 0.3 + Math.max(0, Math.min(1, (x / width - 0.2) / 0.8)) * 0.7;
+      const shimmer = 0.78 + Math.sin(elapsed * 0.55 + particle.phase) * 0.22;
+      const alpha = Math.max(0, Math.min(0.85, particle.opacity * presence * edgeFade * shimmer + influence * 0.35));
+      const color = particle.cool ? this.secondaryColor : this.color;
+      context.fillStyle = `rgb(${color} / ${alpha})`;
+      context.beginPath();
+      context.arc(x, y, particle.radius * (1 + influence * 0.3), 0, Math.PI * 2);
+      context.fill();
+      if (particle.radius < 1.1) return;
+      const angle = Math.atan2(y - height * 0.46, x - width * 0.68) + Math.PI / 2;
+      const length = 2 + particle.radius * 2 + influence * this.glow.energy * 14;
+      context.strokeStyle = `rgb(${color} / ${alpha * 0.5})`;
+      context.lineWidth = 0.8;
+      context.beginPath();
+      context.moveTo(x, y);
+      context.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length);
+      context.stroke();
+    }
+  }
+
+  if (!customElements.get("hero-particles")) {
+    customElements.define("hero-particles", HeroParticles);
+  }
+</script>

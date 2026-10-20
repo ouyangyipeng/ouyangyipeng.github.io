@@ -1,115 +1,114 @@
 ---
+import { getSiteConfig } from "../config";
 import { ui } from "../i18n/ui";
 import type { Lang } from "../config/types";
 import ThemeToggle from "./ThemeToggle.astro";
-
-interface Props {
-  lang: Lang;
-}
-
+interface Props { lang: Lang; }
 const { lang } = Astro.props;
 const t = ui[lang];
-const altLang: Lang = lang === "en" ? "zh" : "en";
-const altPath = altLang === "en" ? "/" : "/zh/";
+const personal = getSiteConfig(lang).personal;
+const altPath = lang === "en" ? "/zh/" : "/";
+const links = [
+  ["#about", t.navAbout], ["#experience", t.navExperience],
+  ["#open-source", t.navOpenSource], ["#research", t.navResearch],
+  ["#awards", t.navAwards],
+  [lang === "en" ? "/blog/" : "/zh/blog/", t.navBlog],
+];
 ---
-
-<header
-  id="header"
-  class="fixed top-0 left-0 right-0 z-50 hidden md:block transition-all duration-300"
->
-  <nav class="max-w-7xl mx-auto px-8 py-4">
-    <ul class="flex items-center gap-8 justify-center">
-      <li>
-        <a
-          href="#about"
-          class="text-gray-700 hover:text-black transition-colors font-medium"
-        >
-          {t.navAbout}
-        </a>
-      </li>
-      <li>
-        <a
-          href="#nexa"
-          class="text-gray-700 hover:text-black transition-colors font-medium"
-        >
-          {t.navNexa}
-        </a>
-      </li>
-      <li>
-        <a
-          href="#research"
-          class="text-gray-700 hover:text-black transition-colors font-medium"
-        >
-          {t.navResearch}
-        </a>
-      </li>
-      <li>
-        <a
-          href="#experience"
-          class="text-gray-700 hover:text-black transition-colors font-medium"
-        >
-          {t.navExperience}
-        </a>
-      </li>
-      <li>
-        <a
-          href="#projects"
-          class="text-gray-700 hover:text-black transition-colors font-medium"
-        >
-          {t.navProjects}
-        </a>
-      </li>
-      <li>
-        <a
-          href="#education"
-          class="text-gray-700 hover:text-black transition-colors font-medium"
-        >
-          {t.navEducation}
-        </a>
-      </li>
-      <li>
-        <a
-          href="#awards"
-          class="text-gray-700 hover:text-black transition-colors font-medium"
-        >
-          {t.navAwards}
-        </a>
-      </li>
-      <li>
-        <a
-          href={lang === "en" ? "/blog/" : "/zh/blog/"}
-          class="text-gray-700 hover:text-black transition-colors font-medium"
-        >
-          {t.navBlog}
-        </a>
-      </li>
-      <li class="ml-4 flex items-center gap-3">
-        <ThemeToggle size="md" />
-        <a
-          href={altPath}
-          class="px-3 py-1 rounded-full text-sm font-bold border-2 transition-colors duration-300"
-          style={`border-color: var(--accent-color, #6d28d9); color: var(--accent-color, #6d28d9);`}
-        >
-          {t.langSwitchLabel}
-        </a>
-      </li>
-    </ul>
-  </nav>
+<a class="skip-link" href="#about">{lang === "zh" ? "跳至正文" : "Skip to content"}</a>
+<header id="header" class="site-header" inert aria-hidden="true">
+  <div class="site-container header-inner">
+    <a class="brand" href="#hero">{personal.name}<span aria-hidden="true">.</span></a>
+    <nav class="desktop-nav" aria-label={lang === "zh" ? "主导航" : "Main navigation"}>
+      {links.map(([href, label]) => <a href={href}>{label}</a>)}
+    </nav>
+    <div class="header-tools">
+      <a href={altPath} class="language" lang={lang === "en" ? "zh" : "en"}>{t.langSwitchLabel}</a>
+      <ThemeToggle lang={lang} />
+      <details class="mobile-menu">
+        <summary aria-label={lang === "zh" ? "栏目导航" : "Section navigation"}>
+          <span class="menu-lines" aria-hidden="true"></span>
+        </summary>
+        <nav aria-label={lang === "zh" ? "栏目" : "Sections"}>
+          {links.map(([href, label], index) => <a href={href}><span>{String(index + 1).padStart(2, "0")}</span>{label}</a>)}
+        </nav>
+      </details>
+    </div>
+  </div>
 </header>
-
-<script>
-  const header = document.getElementById("header");
-  if (header) {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 50) {
-        header.classList.add("backdrop-blur-md", "shadow-sm");
-        header.style.backgroundColor = "var(--header-bg, rgba(255, 255, 255, 0.8))";
-        header.classList.remove("bg-transparent");
-      } else {
-        header.classList.remove("backdrop-blur-md", "shadow-sm");
-        header.style.backgroundColor = "transparent";
-        header.classList.add("bg-transparent");
-      }
-    });
+<style>
+  .site-header { position: fixed; z-index: 50; inset: 0 0 auto; background: var(--header-bg); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border-secondary); opacity: 0; visibility: hidden; transform: translateY(-12px); transition: opacity .28s ease, transform .28s ease, visibility 0s linear .28s; }
+  .site-header.is-visible { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+  .header-inner { height: 80px; display: flex; align-items: center; gap: 28px; }
+  .brand { color: var(--text-primary); text-decoration: none; font-weight: 600; letter-spacing: -.04em; white-space: nowrap; font-size: 16px; }
+  .brand span { color: var(--accent-color); margin-left: 3px; }
+  .desktop-nav { margin-left: auto; display: flex; gap: 22px; }
+  .desktop-nav a { color: var(--text-secondary); text-decoration: none; font-size: 13px; white-space: nowrap; transition: color .2s; }
+  .desktop-nav a:hover { color: var(--accent-color); }
+  .header-tools { display: flex; align-items: center; gap: 16px; }
+  .language { color: var(--text-primary); font: 500 12px var(--font-mono); min-width: 24px; text-align: center; padding-block: 12px; text-decoration: none; }
+  .mobile-menu { display: none; }
+  @media (max-width: 1100px) {
+    .desktop-nav { display: none; }
+    .header-tools { margin-left: auto; gap: 14px; }
+    .mobile-menu { display: block; }
+    summary { list-style: none; width: 40px; height: 40px; display: grid; place-items: center; color: var(--text-primary); }
+    summary::-webkit-details-marker { display: none; }
+    .menu-lines, .menu-lines::after { display: block; width: 18px; height: 1px; background: currentColor; transition: transform .2s; }
+    .menu-lines::after { content: ""; transform: translateY(6px); }
+    [open] .menu-lines { transform: rotate(45deg); }
+    [open] .menu-lines::after { transform: rotate(-90deg); }
+    .mobile-menu nav { position: absolute; top: 100%; inset-inline: 0; background: var(--bg-primary); border-bottom: 1px solid var(--border-primary); padding: 24px max(24px, calc((100vw - 1080px) / 2)); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; box-shadow: 0 24px 40px rgb(0 0 0 / 8%); }
+    .mobile-menu nav a { display: flex; gap: 16px; align-items: baseline; padding-block: 14px; color: var(--text-primary); border-bottom: 1px solid var(--border-secondary); text-decoration: none; }
+    .mobile-menu nav span { font: 11px var(--font-mono); color: var(--accent-color); }
   }
+  @media (max-width: 640px) { .header-inner { height: 68px; gap: 12px; } .brand { font-size: 14px; } .header-tools { gap: 10px; } }
+  @media (prefers-reduced-motion: reduce) { .site-header { transition: none; transform: none; } }
+</style>
+<script>
+  const header = document.querySelector<HTMLElement>("#header");
+  const about = document.querySelector<HTMLElement>("#about");
+  const menu = document.querySelector<HTMLDetailsElement>(".mobile-menu");
+
+  if (header && about) {
+    about.tabIndex = -1;
+    let frame = 0;
+
+    const updateVisibility = () => {
+      frame = 0;
+      const visible = about.getBoundingClientRect().top <= header.offsetHeight;
+      if (visible === !header.inert) return;
+      if (!visible) {
+        if (menu) menu.open = false;
+        if (document.activeElement instanceof HTMLElement && header.contains(document.activeElement)) {
+          document.activeElement.blur();
+        }
+      }
+      header.inert = !visible;
+      header.setAttribute("aria-hidden", String(!visible));
+      header.classList.toggle("is-visible", visible);
+    };
+    const scheduleUpdate = () => {
+      if (!frame) frame = requestAnimationFrame(updateVisibility);
+    };
+
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("hashchange", scheduleUpdate);
+    window.addEventListener("pageshow", scheduleUpdate);
+    window.addEventListener("load", scheduleUpdate);
+    const hero = document.querySelector("#hero");
+    if (hero) new ResizeObserver(scheduleUpdate).observe(hero);
+    updateVisibility();
+  }
+
+  menu?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => { menu.open = false; }));
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape" || !menu?.open) return;
+    menu.open = false;
+    menu.querySelector("summary")?.focus();
+  });
+  document.addEventListener("click", event => {
+    if (menu?.open && event.target instanceof Node && !menu.contains(event.target)) menu.open = false;
+  });
 </script>

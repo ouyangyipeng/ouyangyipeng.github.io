@@ -1,3 +1,5 @@
+import type { ImageMetadata } from "astro";
+
 // Type definitions for site configuration
 
 export type Lang = "en" | "zh";
@@ -9,6 +11,7 @@ export interface SocialLinks {
   github: string;
   website?: string;
   orcid?: string;
+  googleScholar?: string;
 }
 
 export interface PersonalConfig {
@@ -17,11 +20,11 @@ export interface PersonalConfig {
   description: string;
   accentColor: string;
   social: SocialLinks;
-  avatar?: string;
+  avatar?: string | ImageMetadata;
 }
 
 export interface AboutConfig {
-  bio: string;
+  bio: Array<string | { strong: string }>;
   skills: string[];
   researchDirections: string[];
 }
@@ -35,6 +38,9 @@ export interface Project {
   level?: string;
   leader?: string;
   leaderLink?: string;
+  presentation?: "ecosystem" | "featured";
+  logo?: string;
+  homepage?: string;
 }
 
 export interface Experience {
@@ -42,13 +48,25 @@ export interface Experience {
   title: string;
   dateRange: string;
   bullets: string[];
+  coverage?: {
+    label: string;
+    url: string;
+  };
   link?: string;
+  category?: "service";
 }
 
 export interface Education {
   school: string;
   degree: string;
   dateRange: string;
+  summary?: string;
+  advisor?: {
+    name: string;
+    link: string;
+    lab: string;
+    labLink: string;
+  };
   achievements: string[];
   link?: string;
 }
@@ -104,6 +122,8 @@ export interface SiteConfig {
 export interface I18nStrings {
   navAbout: string;
   navNexa: string;
+  navOpenSource: string;
+  navService: string;
   navResearch: string;
   navExperience: string;
   navProjects: string;
@@ -114,6 +134,8 @@ export interface I18nStrings {
   heroIm: string;
   sectionAbout: string;
   sectionNexaProject: string;
+  sectionOpenSource: string;
+  sectionService: string;
   sectionResearch: string;
   sectionExperience: string;
   sectionProjects: string;

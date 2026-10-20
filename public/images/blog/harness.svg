@@ -10,7 +10,7 @@
   <!-- Shield/harness icon -->
   <g transform="translate(400,170)">
     <!-- Shield shape -->
-    <path d="M0,-80 L60,-50 L60,20 Q60,70 0,90 Q-60,70 -60,20 L-60,-50 Z" fill="#6d28d9" opacity="0.2" stroke="#6d28d9" stroke-width="3" opacity="0.5"/>
+    <path d="M0,-80 L60,-50 L60,20 Q60,70 0,90 Q-60,70 -60,20 L-60,-50 Z" fill="#6d28d9" fill-opacity="0.2" stroke="#6d28d9" stroke-width="3" opacity="0.5"/>
     <!-- Inner shield -->
     <path d="M0,-50 L35,-30 L35,10 Q35,45 0,55 Q-35,45 -35,10 L-35,-30 Z" fill="#6d28d9" opacity="0.4"/>
     <!-- Checkmark -->

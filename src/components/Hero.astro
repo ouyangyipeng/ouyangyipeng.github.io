@@ -1,5 +1,6 @@
 ---
 import { getSiteConfig } from "../config";
+import HeroParticles from "./HeroParticles.astro";
 import { ui } from "../i18n/ui";
 import type { Lang } from "../config/types";
 
@@ -12,123 +13,16 @@ const siteConfig = getSiteConfig(lang);
 const t = ui[lang];
 ---
 
-<div
-  id="hero"
-  class="relative isolate overflow-hidden bg-white py-24 md:min-h-screen md:flex md:items-center"
-  style={`--accent-color: ${siteConfig.personal.accentColor}`}
->
-  <!-- Gradient overlay -->
-  <div
-    class="absolute inset-0 -z-10"
-    style={`background: radial-gradient(ellipse 800px 1200px at 0% 0%, ${siteConfig.personal.accentColor}40 0%, ${siteConfig.personal.accentColor}25 20%, ${siteConfig.personal.accentColor}10 40%, rgba(255, 255, 255, 0.3) 70%, rgba(255, 255, 255, 0.8) 90%, white 100%)`}
-  >
+<section id="hero" class="hero">
+  <div class="hero-atmosphere" aria-hidden="true"></div>
+  <HeroParticles />
+  <div class="site-container hero-content">
+    <h2 class="hero-greeting animate-fade-in">{t.heroGreeting}</h2>
+    <h1 class="hero-name animate-fade-in animation-delay-200">{t.heroIm} <span>{siteConfig.personal.name}</span></h1>
+    <p class="hero-title animate-fade-in animation-delay-400">{siteConfig.personal.title}</p>
   </div>
-  <svg
-    aria-hidden="true"
-    class="absolute inset-0 -z-10 size-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
-  >
-    <defs>
-      <pattern
-        x="50%"
-        y={-1}
-        id="programming-symbols"
-        width="400"
-        height="400"
-        patternUnits="userSpaceOnUse"
-      >
-        <text
-          x="50"
-          y="50"
-          fill={siteConfig.personal.accentColor}
-          font-family="monospace"
-          font-size="24"
-          transform="rotate(-15)"
-        ></></text>
-        <text
-          x="150"
-          y="100"
-          fill={siteConfig.personal.accentColor}
-          font-family="monospace"
-          font-size="20"
-          transform="rotate(10)"
-        >{}</text>
-        <text
-          x="250"
-          y="80"
-          fill={siteConfig.personal.accentColor}
-          font-family="monospace"
-          font-size="18"
-          transform="rotate(-5)"
-        >=></text>
-        <text
-          x="100"
-          y="200"
-          fill={siteConfig.personal.accentColor}
-          font-family="monospace"
-          font-size="22"
-          transform="rotate(15)"
-        >[]</text>
-        <text
-          x="300"
-          y="180"
-          fill={siteConfig.personal.accentColor}
-          font-family="monospace"
-          font-size="20"
-          transform="rotate(-10)"
-        ><></text>
-        <text
-          x="200"
-          y="250"
-          fill={siteConfig.personal.accentColor}
-          font-family="monospace"
-          font-size="24"
-          transform="rotate(5)"
-        >()</text>
-        <text
-          x="50"
-          y="320"
-          fill={siteConfig.personal.accentColor}
-          font-family="monospace"
-          font-size="18"
-          transform="rotate(-8)"
-        >::</text>
-        <text
-          x="350"
-          y="300"
-          fill={siteConfig.personal.accentColor}
-          font-family="monospace"
-          font-size="22"
-          transform="rotate(12)"
-        >#</text>
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" stroke-width="0" fill="url(#programming-symbols)" opacity="0.2" />
-  </svg>
-
-  <!-- Centered big text — matching devportfolio style -->
-  <div class="h-full mx-auto p-8 sm:p-12 md:p-24 flex items-center">
-    <div>
-      <h2
-        class="text-pretty text-xl sm:text-2xl md:text-5xl font-bold tracking-tight text-gray-700 animate-fade-in"
-      >
-        {t.heroGreeting}
-      </h2>
-      <h1
-        class="mt-6 sm:mt-8 md:mt-10 text-pretty text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold tracking-tight text-gray-800 animate-fade-in animation-delay-200"
-      >
-        {t.heroIm} <span style={{ color: siteConfig.personal.accentColor }}>{siteConfig.personal.name}</span>
-      </h1>
-      <p
-        class="mt-4 sm:mt-6 md:mt-8 text-pretty text-base sm:text-lg md:text-xl/8 font-medium text-gray-600 animate-fade-in animation-delay-400"
-      >
-        {siteConfig.personal.title}
-      </p>
-    </div>
-  </div>
-
-  <!-- Social links at bottom — matching devportfolio style -->
   <div
-    class="absolute bottom-0 left-0 right-0 p-8 sm:p-12 md:p-24 flex gap-x-4 sm:gap-x-6 md:gap-x-8 text-gray-700 animate-fade-in animation-delay-600"
+    class="site-container hero-social animate-fade-in animation-delay-600"
   >
     <a
       href={`mailto:${siteConfig.personal.social.email}`}
@@ -184,24 +78,44 @@ const t = ui[lang];
         </svg>
       </a>
     )}
+    {siteConfig.personal.social.googleScholar && (
+      <a
+        href={siteConfig.personal.social.googleScholar}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Google Scholar"
+        class="transition-colors duration-300 hover:text-[var(--accent-color)]"
+      >
+        <span aria-hidden="true" class="google-mark h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8"></span>
+      </a>
+    )}
   </div>
-</div>
-
+  <a class="hero-scroll" href="#about" aria-label={lang === "zh" ? "向下了解更多" : "Explore below"}><span aria-hidden="true">↓</span></a>
+</section>
 <style>
-  @keyframes fade-in {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .animate-fade-in {
-    animation: fade-in 0.8s ease-out both;
-  }
-  .animation-delay-200 {
-    animation-delay: 0.2s;
-  }
-  .animation-delay-400 {
-    animation-delay: 0.4s;
-  }
-  .animation-delay-600 {
-    animation-delay: 0.6s;
+  .hero { position: relative; isolation: isolate; overflow: hidden; min-height: 100svh; display: flex; align-items: center; padding-block: 160px 180px; background: var(--bg-primary); }
+  .hero-atmosphere { position: absolute; inset: 0; z-index: -2; background: radial-gradient(ellipse at 0% 15%, var(--hero-glow), transparent 65%), radial-gradient(ellipse at 90% 65%, var(--hero-glow-secondary), transparent 45%); mask-image: linear-gradient(to bottom, black 75%, transparent); }
+  .hero-content { z-index: 1; }
+  .hero-greeting { font: 500 clamp(24px, 3vw, 42px)/1.3 var(--font-mono); letter-spacing: -.05em; color: var(--text-secondary); margin: 0 0 30px; }
+  .hero-name { font: 600 clamp(42px, 7.4vw, 96px)/1.16 var(--font-mono); letter-spacing: -.07em; color: var(--text-primary); max-width: 1100px; margin: 0; text-wrap: balance; }
+  .hero-name span { color: var(--accent-color); }
+  .hero-title { font: 400 clamp(14px, 1.5vw, 19px)/1.8 var(--font-mono); color: var(--text-secondary); margin: 32px 0 0; max-width: 65ch; }
+  .hero-social { position: absolute; bottom: 72px; inset-inline: 0; display: flex; gap: 28px; align-items: center; color: var(--text-secondary); z-index: 1; }
+  .hero-social a { display: inline-flex; flex: 0 0 auto; min-width: 24px; min-height: 40px; padding-block: 8px; }
+  .google-mark { display: block; background: currentColor; mask: url('/images/organizations/google-g.png') center / contain no-repeat; }
+  .hero-scroll { position: absolute; bottom: 76px; right: max(40px, calc((100% - 1160px) / 2)); border: 1px solid var(--border-primary); border-radius: 50%; width: 48px; height: 48px; display: grid; place-items: center; color: var(--text-secondary); text-decoration: none; transition: background .2s, transform .2s; z-index: 1; }
+  .hero-scroll:hover { background: var(--accent-soft); transform: translateY(3px); }
+  @keyframes fade-in { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-fade-in { animation: fade-in .9s cubic-bezier(.16, 1, .3, 1) both; }
+  .animation-delay-200 { animation-delay: .2s; }
+  .animation-delay-400 { animation-delay: .4s; }
+  .animation-delay-600 { animation-delay: .6s; }
+  @media (max-width: 640px) {
+    .hero { min-height: 100svh; padding-block: 150px 170px; }
+    .hero-greeting { margin-bottom: 24px; }
+    .hero-name { font-size: clamp(34px, 10.6vw, 58px); }
+    .hero-title { margin-top: 24px; }
+    .hero-social { bottom: 54px; gap: clamp(16px, 4vw, 24px); }
+    .hero-scroll { bottom: 54px; right: 24px; width: 40px; height: 40px; }
   }
 </style>

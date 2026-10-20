@@ -4,6 +4,7 @@ import { getSiteConfig } from "../config";
 import { ui } from "../i18n/ui";
 import type { Lang } from "../config/types";
 import ThemeToggle from "../components/ThemeToggle.astro";
+import ThemeInit from "../components/ThemeInit.astro";
 import "../styles/global.css";
 import "../styles/blog.css";
 
@@ -19,6 +20,19 @@ const siteConfig = getSiteConfig(lang);
 const t = ui[lang];
 const prefix = lang === "zh" ? "/zh/blog" : "/blog";
 const homePrefix = lang === "zh" ? "/zh/" : "/";
+const homeLabel = lang === "zh" ? "主页" : "Home";
+const languageHref = lang === "zh"
+  ? Astro.url.pathname.replace(/^\/zh(?=\/)/, "")
+  : `/zh${Astro.url.pathname}`;
+const languageLabel = lang === "zh" ? "English" : "中文";
+const navigationLabel = lang === "zh" ? "博客导航" : "Blog navigation";
+const isBlogIndex = Astro.url.pathname.replace(/\/$/, "") === prefix;
+const navigation = [
+  { key: "recent", label: t.blogNavRecent, href: `${prefix}/` },
+  { key: "categories", label: t.blogNavCategories, href: `${prefix}/categories/` },
+  { key: "tags", label: t.blogNavTags, href: `${prefix}/tags/` },
+  { key: "archives", label: t.blogNavArchives, href: `${prefix}/archives/` },
+];
 
 const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort(
@@ -38,7 +52,8 @@ const canonicalUrl = `https://oyyp.nexa-lang.com${prefix}`;
 <html lang={lang === "zh" ? "zh-CN" : "en"}>
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
+    <ThemeInit />
+    <link rel="icon" type="image/png" href="/images/nexa-logo-noframe.png" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description || `${t.blogTitle} by ${siteConfig.personal.name}`} />
@@ -49,7 +64,7 @@ const canonicalUrl = `https://oyyp.nexa-lang.com${prefix}`;
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={`${title} — ${siteConfig.personal.name}`} />
     <meta property="og:description" content={description || `${t.blogTitle} by ${siteConfig.personal.name}`} />
-    <meta property="og:image" content={`${canonicalUrl}/images/nexa-logo.svg`} />
+    <meta property="og:image" content={`${canonicalUrl}/images/nexa-logo-noframe.png`} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary" />
@@ -66,48 +81,56 @@ const canonicalUrl = `https://oyyp.nexa-lang.com${prefix}`;
     <!-- Theme color for dark mode -->
     <meta name="color-scheme" content="light dark" />
   </head>
-  <body class="min-h-screen bg-gray-50">
+  <body class="blog-body">
+    <a class="blog-skip-link" href="#blog-content">{lang === "zh" ? "跳到正文" : "Skip to content"}</a>
     <!-- Mobile header (hidden on desktop) -->
-    <div class="blog-mobile-header">
-      <a href={homePrefix} class="blog-topnav-home">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-        Home
-      </a>
-      <a href={`${prefix}/`} class:list={[activeNav === "recent" && "active"]}>{t.blogNavRecent}</a>
-      <a href={`${prefix}/categories/`} class:list={[activeNav === "categories" && "active"]}>{t.blogNavCategories}</a>
-      <a href={`${prefix}/tags/`} class:list={[activeNav === "tags" && "active"]}>{t.blogNavTags}</a>
-      <a href={`${prefix}/archives/`} class:list={[activeNav === "archives" && "active"]}>{t.blogNavArchives}</a>
-    </div>
+    <header class="blog-mobile-header">
+      <div class="blog-mobile-toolbar">
+        <a href={homePrefix} class="blog-topnav-home">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          {homeLabel}
+        </a>
+        <div class="blog-controls">
+          <a href={languageHref} lang={lang === "zh" ? "en" : "zh-CN"} hreflang={lang === "zh" ? "en" : "zh-CN"} class="blog-language" aria-label={lang === "zh" ? "Switch to English" : "切换到中文"}>{languageLabel}</a>
+          <ThemeToggle size="md" lang={lang} />
+        </div>
+      </div>
+      <nav class="blog-mobile-nav" aria-label={navigationLabel}>
+        {navigation.map((item) => (
+          <a href={item.href} class:list={[activeNav === item.key && "active"]} aria-current={activeNav === item.key ? "page" : undefined}>{item.label}</a>
+        ))}
+      </nav>
+    </header>
 
     <div class="blog-layout">
       <!-- Left Sidebar -->
       <aside class="blog-left">
         <!-- Avatar + Title -->
-        <div class="flex flex-col items-center gap-2">
-          <img src="/images/nexa-logo.svg" alt="Logo" class="blog-sidebar-avatar" />
+        <a href={homePrefix} class="blog-sidebar-profile">
+          <img src="/images/nexa-logo-noframe.png" alt="" class="blog-sidebar-avatar" width="48" height="48" />
           <div class="blog-sidebar-title">{siteConfig.personal.name}</div>
           <div class="blog-sidebar-subtitle">{siteConfig.personal.title}</div>
-        </div>
+        </a>
 
         <!-- Navigation -->
-        <nav class="blog-sidebar-nav">
+        <nav class="blog-sidebar-nav" aria-label={navigationLabel}>
           <a href={homePrefix}>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            Home
+            {homeLabel}
           </a>
-          <a href={`${prefix}/`} class:list={[activeNav === "recent" && "active"]}>
+          <a href={`${prefix}/`} class:list={[activeNav === "recent" && "active"]} aria-current={activeNav === "recent" ? "page" : undefined}>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.879 2.879C5 3.757 5 5.172 5 8v8c0 2.828 0 4.243.879 5.121C6.757 22 8.172 22 11 22h2c2.828 0 4.243 0 5.121-.879C19 20.243 19 18.828 19 16V8c0-2.828 0-4.243-.879-5.121C17.243 2 15.828 2 13 2h-2c-2.828 0-4.243 0-5.121.879M8.25 17a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75M9 12.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5zM8.25 9A.75.75 0 0 1 9 8.25h6a.75.75 0 0 1 0 1.5H9A.75.75 0 0 1 8.25 9" clip-rule="evenodd"></path></svg>
             {t.blogNavRecent}
           </a>
-          <a href={`${prefix}/categories/`} class:list={[activeNav === "categories" && "active"]}>
+          <a href={`${prefix}/categories/`} class:list={[activeNav === "categories" && "active"]} aria-current={activeNav === "categories" ? "page" : undefined}>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2 6.95c0-.883 0-1.324.07-1.692A4 4 0 0 1 5.257 2.07C5.626 2 6.068 2 6.95 2c.386 0 .58 0 .766.017a4 4 0 0 1 2.18.904c.144.119.28.255.554.529L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z" opacity=".5"></path><path d="M20 6.238c0-.298-.005-.475-.025-.63a3 3 0 0 0-2.583-2.582C17.197 3 16.965 3 16.5 3H9.988c.116.104.247.234.462.45L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z"></path></svg>
             {t.blogNavCategories}
           </a>
-          <a href={`${prefix}/tags/`} class:list={[activeNav === "tags" && "active"]}>
+          <a href={`${prefix}/tags/`} class:list={[activeNav === "tags" && "active"]} aria-current={activeNav === "tags" ? "page" : undefined}>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2 6.95c0-.883 0-1.324.07-1.692A4 4 0 0 1 5.257 2.07C5.626 2 6.068 2 6.95 2c.386 0 .58 0 .766.017a4 4 0 0 1 2.18.904c.144.119.28.255.554.529L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z" opacity=".5"></path><path d="M20 6.238c0-.298-.005-.475-.025-.63a3 3 0 0 0-2.583-2.582C17.197 3 16.965 3 16.5 3H9.988c.116.104.247.234.462.45L11 4c.816.816 1.224 1.224 1.712 1.495a4 4 0 0 0 .848.352C14.098 6 14.675 6 15.828 6h.374c2.632 0 3.949 0 4.804.77c.079.07.154.145.224.224c.77.855.77 2.172.77 4.804V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14z"></path></svg>
             {t.blogNavTags}
           </a>
-          <a href={`${prefix}/archives/`} class:list={[activeNav === "archives" && "active"]}>
+          <a href={`${prefix}/archives/`} class:list={[activeNav === "archives" && "active"]} aria-current={activeNav === "archives" ? "page" : undefined}>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 21q-.825 0-1.412-.587T3 19q0-.825.588-1.412T5 17q.825 0 1.413.588T7 19q0 .825-.587 1.413T5 21m13.5 0q-.65 0-1.088-.475T16.9 19.4q-.275-2.425-1.312-4.537T12.9 11.1q-1.65-1.65-3.762-2.687T4.6 7.1q-.65-.075-1.125-.512T3 5.5q0-.65.45-1.062t1.075-.363q3.075.275 5.763 1.563t4.737 3.337q2.05 2.05 3.338 4.738t1.562 5.762q.05.625-.363 1.075T18.5 21m-6 0q-.625 0-1.075-.437T10.85 19.5q-.225-1.225-.787-2.262T8.65 15.35q-.85-.85-1.888-1.412T4.5 13.15q-.625-.125-1.062-.575T3 11.5q0-.65.45-1.075t1.075-.325q1.825.25 3.413 1.063t2.837 2.062q1.25 1.25 2.063 2.838t1.062 3.412q.1.625-.325 1.075T12.5 21"></path></svg>
             {t.blogNavArchives}
           </a>
@@ -127,7 +150,7 @@ const canonicalUrl = `https://oyyp.nexa-lang.com${prefix}`;
 
         <!-- Social -->
         <div class="blog-sidebar-social">
-          <a href="mailto:ouyyp5@mail2.sysu.edu.cn" aria-label="Email">
+          <a href="mailto:ouyyp5@mail2.sysu.edu.cn" aria-label={lang === "zh" ? "电子邮箱" : "Email"}>
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path><path d="M3 7l9 6l9 -6"></path></svg>
           </a>
           <a href="https://github.com/ouyangyipeng" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
@@ -140,22 +163,26 @@ const canonicalUrl = `https://oyyp.nexa-lang.com${prefix}`;
       </aside>
 
       <!-- Main Content -->
-      <main class="blog-main">
+      <main class="blog-main" id="blog-content" tabindex="-1">
         <!-- Top navbar -->
         <div class="blog-topnav">
-          <a href={homePrefix} class="blog-topnav-home">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            Home
-          </a>
-          <a href={`${prefix}/`} class:list={[activeNav === "recent" && "active"]}>{t.blogNavRecent}</a>
-          <a href={`${prefix}/categories/`} class:list={[activeNav === "categories" && "active"]}>{t.blogNavCategories}</a>
-          <a href={`${prefix}/tags/`} class:list={[activeNav === "tags" && "active"]}>{t.blogNavTags}</a>
-          <a href={`${prefix}/archives/`} class:list={[activeNav === "archives" && "active"]}>{t.blogNavArchives}</a>
-          <div class="ml-auto">
-            <ThemeToggle size="md" />
+          <nav class="blog-breadcrumb" aria-label={lang === "zh" ? "当前位置" : "Breadcrumb"}>
+            <a href={homePrefix}>{homeLabel}</a>
+            <span aria-hidden="true">/</span>
+            <a href={`${prefix}/`}>{t.blogTitle}</a>
+          </nav>
+          <div class="blog-controls">
+            <a href={languageHref} lang={lang === "zh" ? "en" : "zh-CN"} hreflang={lang === "zh" ? "en" : "zh-CN"} class="blog-language" aria-label={lang === "zh" ? "Switch to English" : "切换到中文"}>{languageLabel}</a>
+            <ThemeToggle size="md" lang={lang} />
           </div>
         </div>
 
+        {isBlogIndex && (
+          <header class="blog-intro">
+            <span class="blog-intro-label">{lang === "zh" ? "研究 · 工程 · 开源" : "Research · Engineering · Open source"}</span>
+            <h1>{t.blogTitle}</h1>
+          </header>
+        )}
         <slot />
       </main>
 
@@ -165,15 +192,15 @@ const canonicalUrl = `https://oyyp.nexa-lang.com${prefix}`;
         <div class="blog-widget">
           <div class="blog-widget-title">{t.blogSidebarStats}</div>
           <div class="blog-widget-stat">
-            <span>Posts</span>
+            <span>{lang === "zh" ? "文章" : "Posts"}</span>
             <span class="blog-widget-stat-value">{totalPosts}</span>
           </div>
           <div class="blog-widget-stat">
-            <span>Categories</span>
+            <span>{t.blogNavCategories}</span>
             <span class="blog-widget-stat-value">{categories.length}</span>
           </div>
           <div class="blog-widget-stat">
-            <span>Tags</span>
+            <span>{t.blogNavTags}</span>
             <span class="blog-widget-stat-value">{tags.length}</span>
           </div>
         </div>
@@ -205,10 +232,10 @@ const canonicalUrl = `https://oyyp.nexa-lang.com${prefix}`;
     </div>
 
     <!-- Blog Footer -->
-    <div class="blog-footer">
+    <footer class="blog-footer">
       <p>
         {t.footerBuilt} · <a href={homePrefix}>{siteConfig.personal.name}</a>
       </p>
-    </div>
+    </footer>
   </body>
 </html>

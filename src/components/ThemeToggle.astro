@@ -1,142 +1,47 @@
 ---
-/**
- * ThemeToggle — 暗色/亮色模式切换按钮
- * 使用 localStorage 持久化用户偏好，首次访问时跟随系统偏好
- */
-interface Props {
-  size?: "sm" | "md" | "lg";
-  class?: string;
-}
-
-const { size = "md", class: className = "" } = Astro.props;
-
-const sizeClasses = {
-  sm: "w-7 h-7",
-  md: "w-9 h-9",
-  lg: "w-10 h-10",
-};
+import type { Lang } from "../config/types";
+interface Props { size?: "sm" | "md" | "lg"; class?: string; lang?: Lang; }
+const { size = "md", class: className = "", lang = "en" } = Astro.props;
+const label = lang === "zh" ? "深色模式" : "Dark mode";
 ---
-
-<button
-  id="theme-toggle"
-  type="button"
-  class:list={[
-    "theme-toggle-btn",
-    sizeClasses[size],
-    "inline-flex items-center justify-center rounded-full border border-gray-300 hover:border-gray-400 transition-colors",
-    className,
-  ]}
-  aria-label="Toggle dark mode"
-  title="Toggle dark mode"
->
-  <!-- Sun icon (shown in dark mode) -->
-  <svg class="icon-sun hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="5"></circle>
-    <line x1="12" y1="1" x2="12" y2="3"></line>
-    <line x1="12" y1="21" x2="12" y2="23"></line>
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-    <line x1="1" y1="12" x2="3" y2="12"></line>
-    <line x1="21" y1="12" x2="23" y2="12"></line>
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+<button type="button" data-theme-toggle class:list={["theme-toggle", `size-${size}`, className]} aria-label={label} aria-pressed="false" title={label}>
+  <svg class="icon-sun" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+    <circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>
   </svg>
-  <!-- Moon icon (shown in light mode) -->
-  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  <svg class="icon-moon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+    <path d="M20.8 13a9 9 0 0 1-9.8-9.8A9 9 0 1 0 20.8 13Z"/>
   </svg>
 </button>
-
 <style>
-  .theme-toggle-btn {
-    background: transparent;
-    cursor: pointer;
-    color: currentColor;
-  }
-  .theme-toggle-btn:hover {
-    background: rgba(0, 0, 0, 0.05);
-  }
-  html.dark .theme-toggle-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  html.dark .theme-toggle-btn {
-    border-color: var(--border-primary);
-    color: var(--text-secondary);
-  }
-  html.dark .icon-sun {
-    display: block !important;
-  }
-  html.dark .icon-moon {
-    display: none !important;
-  }
+  .theme-toggle { display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border-primary); border-radius: 50%; background: transparent; color: var(--text-secondary); width: 40px; height: 40px; flex-shrink: 0; transition: background .2s, color .2s; }
+  .theme-toggle:hover { background: var(--accent-soft); color: var(--accent-color); }
+  .size-sm { width: 36px; height: 36px; }
+  .size-lg { width: 44px; height: 44px; }
+  .icon-sun { display: none; }
+  :global(html.dark) .icon-sun { display: block; }
+  :global(html.dark) .icon-moon { display: none; }
 </style>
-
 <script>
-  // Theme toggle script — runs immediately on parse
-  (function() {
-    const STORAGE_KEY = "theme";
-    const DARK_CLASS = "dark";
-    const html = document.documentElement;
-
-    // Determine initial theme
-    function getInitialTheme(): "light" | "dark" {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "light" || stored === "dark") return stored;
-      // Fall back to system preference
-      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    }
-
-    // Apply theme immediately (before DOM is interactive to prevent flash)
-    const initialTheme = getInitialTheme();
-    if (initialTheme === "dark") {
-      html.classList.add(DARK_CLASS);
-    } else {
-      html.classList.remove(DARK_CLASS);
-    }
-
-    // Listen for system preference changes
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        if (e.matches) {
-          html.classList.add(DARK_CLASS);
-        } else {
-          html.classList.remove(DARK_CLASS);
-        }
-      }
-    });
-
-    // Set up toggle button after DOM is ready
-    document.addEventListener("astro:page-load", () => {
-      const btn = document.getElementById("theme-toggle");
-      if (btn) {
-        btn.addEventListener("click", () => {
-          const isDark = html.classList.contains(DARK_CLASS);
-          if (isDark) {
-            html.classList.remove(DARK_CLASS);
-            localStorage.setItem(STORAGE_KEY, "light");
-          } else {
-            html.classList.add(DARK_CLASS);
-            localStorage.setItem(STORAGE_KEY, "dark");
-          }
-        });
-      }
-    });
-
-    // Also handle non-Astro navigation (fallback)
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("theme-toggle");
-      if (btn) {
-        btn.addEventListener("click", () => {
-          const isDark = html.classList.contains(DARK_CLASS);
-          if (isDark) {
-            html.classList.remove(DARK_CLASS);
-            localStorage.setItem(STORAGE_KEY, "light");
-          } else {
-            html.classList.add(DARK_CLASS);
-            localStorage.setItem(STORAGE_KEY, "dark");
-          }
-        });
-      }
-    });
-  })();
+  const root = document.documentElement;
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]");
+  let userTheme: string | null = null;
+  try { userTheme = localStorage.getItem("theme"); }
+  catch { console.warn("Theme preference storage is unavailable."); }
+  function applyTheme(dark: boolean): void {
+    root.classList.toggle("dark", dark);
+    buttons.forEach(button => button.setAttribute("aria-pressed", String(dark)));
+  }
+  applyTheme(userTheme === "dark");
+  buttons.forEach(button => button.addEventListener("click", () => {
+    const dark = !root.classList.contains("dark");
+    userTheme = dark ? "dark" : "light";
+    applyTheme(dark);
+    try { localStorage.setItem("theme", userTheme); }
+    catch { console.warn("Theme changed for this page; preference could not be saved."); }
+  }));
+  window.addEventListener("storage", event => {
+    if (event.key !== "theme" && event.key !== null) return;
+    userTheme = event.newValue;
+    applyTheme(userTheme === "dark");
+  });
 </script>
