@@ -3,9 +3,14 @@ import type { Lang, Award } from "./types";
 const configs: Record<Lang, Award[]> = {
   en: [
     {
-      title: "National Scholarship · Announced Selection",
-      date: "2025–2026 academic year",
-      description: "Listed in the scholarship selection announcement at Sun Yat-sen University.",
+      title: "National Scholarship",
+      date: "2026 · 2025–2026 academic year",
+      description: "Sun Yat-sen University",
+    },
+    {
+      title: "First-Class Scholarship · Three Consecutive Years",
+      date: "2026 · 2025–2026 academic year",
+      description: "Sun Yat-sen University · Awarded in 2023–2024, 2024–2025, and 2025–2026.",
     },
     {
       title: "National First Prize · Operating System Design Contest",
@@ -43,12 +48,7 @@ const configs: Record<Lang, Award[]> = {
       link: "https://yatcc-ai.com/",
     },
     {
-      title: "First-Class Scholarship · Three Consecutive Years",
-      date: "2023–2024, 2024–2025, 2025–2026",
-      description: "Sun Yat-sen University · The 2025–2026 selection has been announced.",
-    },
-    {
-      title: "Huawei Scholarship",
+      title: "HUAWEI Scholarship",
       date: "2023–2024 academic year",
       description: "Sun Yat-sen University",
     },
@@ -56,12 +56,21 @@ const configs: Record<Lang, Award[]> = {
       title: "First-Class Scholarship for Moral Excellence",
       description: "Sun Yat-sen University",
     },
+    {
+      title: "SYSU Three-Star Volunteer",
+      description: "Sun Yat-sen University · Recognition for volunteer service",
+    },
   ],
   zh: [
     {
-      title: "国家奖学金（公示入选）",
-      date: "2025–2026 学年",
-      description: "入选中山大学本学年奖学金评选公示名单。",
+      title: "国家奖学金",
+      date: "2026 · 2025–2026 学年",
+      description: "中山大学",
+    },
+    {
+      title: "中山大学一等奖学金（连续三学年）",
+      date: "2026 · 2025–2026 学年",
+      description: "2023–2024、2024–2025、2025–2026 学年获奖。",
     },
     {
       title: "操作系统设计赛全国一等奖",
@@ -99,11 +108,6 @@ const configs: Record<Lang, Award[]> = {
       link: "https://yatcc-ai.com/",
     },
     {
-      title: "中山大学一等奖学金（连续三学年）",
-      date: "2023–2024、2024–2025、2025–2026 学年",
-      description: "2025–2026 学年评选结果已公示。",
-    },
-    {
       title: "华为奖学金",
       date: "2023–2024 学年",
       description: "中山大学",
@@ -111,6 +115,10 @@ const configs: Record<Lang, Award[]> = {
     {
       title: "道德风尚一等奖学金",
       description: "中山大学",
+    },
+    {
+      title: "中山大学三星级志愿者",
+      description: "中山大学 · 志愿服务荣誉认证",
     },
   ],
 };

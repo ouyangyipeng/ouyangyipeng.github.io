@@ -1,49 +1,48 @@
 ---
+import { Image } from "astro:assets";
 import { getSiteConfig } from "../config";
 import { ui } from "../i18n/ui";
 import type { Lang } from "../config/types";
-
-interface Props {
-  lang: Lang;
-}
-
+interface Props { lang: Lang; }
 const { lang } = Astro.props;
-const siteConfig = getSiteConfig(lang);
+const { about, personal } = getSiteConfig(lang);
 const t = ui[lang];
 ---
-
-<section id="about" class="py-16 md:py-24">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-12">
-      {t.sectionAbout}
-    </h2>
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12">
-      <div class="lg:col-span-1">
-        <p class="text-base sm:text-lg leading-7 text-gray-600">
-          {siteConfig.about.bio}
-        </p>
-      </div>
-      <div class="lg:col-span-3">
-        <div class="flex flex-wrap gap-2 mb-8">
-          {siteConfig.about.skills.map((skill) => (
-            <span
-              class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 border border-gray-200"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-        <div class="flex flex-wrap gap-3">
-          {siteConfig.about.researchDirections.map((dir) => (
-            <span
-              class="px-4 py-2 rounded-full text-sm sm:text-base font-medium text-white"
-              style={`background-color: ${siteConfig.personal.accentColor}`}
-            >
-              {dir}
-            </span>
-          ))}
-        </div>
-      </div>
+<section id="about" class="section">
+  <div class="site-container">
+    <div class="section-heading"><span class="section-index" aria-hidden="true">01</span><h2 class="section-title">{t.sectionAbout}</h2></div>
+    <div class="about-layout">
+      <p class="biography">{about.bio.map(part => typeof part === "string" ? part : <strong>{part.strong}</strong>)}</p>
+      <aside class="about-focus" aria-label={lang === "zh" ? "研究方向与技能" : "Research interests and skills"}>
+        {personal.avatar && (
+          <Image
+            class="portrait"
+            src={personal.avatar}
+            alt={personal.name}
+            width={152}
+            height={152}
+            densities={[1, 2]}
+            format="webp"
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+        <ul class="directions">{about.researchDirections.map(direction => <li>{direction}</li>)}</ul>
+        <div class="skills">{about.skills.map(skill => <span>{skill}</span>)}</div>
+      </aside>
     </div>
   </div>
 </section>
+<style>
+  .about-layout { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); gap: 80px; }
+  .biography { margin: 0; font-size: 18px; line-height: 1.9; color: var(--text-secondary); max-width: 65ch; text-align: justify; text-align-last: start; hyphens: auto; }
+  .biography strong { color: var(--text-primary); font-weight: 600; }
+  .about-focus { border-left: 1px solid var(--border-primary); padding-left: 32px; }
+  .directions { margin: 0; padding: 0; list-style: none; color: var(--text-primary); font-size: 15px; line-height: 1.6; }
+  .directions li { margin-bottom: 14px; display: flex; align-items: baseline; gap: 10px; }
+  .directions li::before { content: ""; display: block; width: 4px; height: 4px; background: var(--accent-color); border-radius: 50%; flex-shrink: 0; }
+  .skills { display: flex; flex-wrap: wrap; column-gap: 18px; row-gap: 10px; margin-top: 32px; font: 12px/1.6 var(--font-mono); color: var(--text-tertiary); }
+  .portrait { display: block; width: 152px; height: 152px; margin: 0 0 28px; border-radius: 12px; object-fit: cover; }
+  @media (max-width: 900px) { .about-layout { grid-template-columns: 1fr; gap: 32px; } .about-focus { padding-left: 24px; } .biography { font-size: 17px; } .portrait { width: 120px; height: 120px; margin-bottom: 24px; } }
+  @media (max-width: 480px) { .biography { font-size: 16px; } }
+</style>

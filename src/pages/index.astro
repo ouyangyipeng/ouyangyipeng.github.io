@@ -1,13 +1,12 @@
 ---
 import { getSiteConfig } from "../config";
+import ThemeInit from "../components/ThemeInit.astro";
 import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
 import About from "../components/About.astro";
-import NexaEcosystem from "../components/NexaEcosystem.astro";
+import OpenSourceProjects from "../components/OpenSourceProjects.astro";
 import Research from "../components/Research.astro";
-import Experience from "../components/Experience.astro";
-import Projects from "../components/Projects.astro";
-import Education from "../components/Education.astro";
+import Journey from "../components/Journey.astro";
 import Awards from "../components/Awards.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
@@ -20,8 +19,9 @@ const canonicalUrl = "https://oyyp.nexa-lang.com";
 
 <html lang="en">
   <head>
+    <ThemeInit />
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/images/nexa-logo.svg" />
+    <link rel="icon" type="image/png" href="/images/nexa-logo-noframe.png" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
@@ -32,7 +32,7 @@ const canonicalUrl = "https://oyyp.nexa-lang.com";
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={siteConfig.personal.description} />
-    <meta property="og:image" content={`${canonicalUrl}/images/nexa-logo.svg`} />
+    <meta property="og:image" content={`${canonicalUrl}/images/nexa-logo-noframe.png`} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary" />
@@ -51,16 +51,14 @@ const canonicalUrl = "https://oyyp.nexa-lang.com";
   </head>
   <body>
     <Header lang={lang} />
-    <section>
+    <main id="main">
       <Hero lang={lang} />
       <About lang={lang} />
-      <NexaEcosystem lang={lang} />
+      <Journey lang={lang} />
+      <OpenSourceProjects lang={lang} />
       <Research lang={lang} />
-      <Experience lang={lang} />
-      <Projects lang={lang} />
-      <Education lang={lang} />
       <Awards lang={lang} />
-    </section>
+    </main>
     <Footer lang={lang} />
   </body>
 </html>

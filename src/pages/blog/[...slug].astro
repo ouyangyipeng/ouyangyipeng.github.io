@@ -27,7 +27,7 @@ const categoryClass = `cat-${post.data.category.toLowerCase().replace(/\s+/g, "-
     <div class="article-header">
       {post.data.cover && (
         <div class="mb-6 rounded-lg overflow-hidden">
-          <img src={post.data.cover} alt={post.data.title} class="w-full h-48 object-cover" />
+          <img src={post.data.cover} alt={post.data.title} class="block w-full h-auto" />
         </div>
       )}
       <h1 class="article-title">{post.data.title}</h1>

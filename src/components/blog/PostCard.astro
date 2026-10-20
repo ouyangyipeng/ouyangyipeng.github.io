@@ -16,8 +16,6 @@ const { title, description, pubDate, category, tags, cover, slug, lang } = Astro
 const prefix = lang === "zh" ? "/zh/blog" : "/blog";
 const locale = lang === "zh" ? "zh-CN" : "en-US";
 
-const categoryClass = `cat-${category.toLowerCase().replace(/\s+/g, "-")}`;
-
 const formattedDate = pubDate.toLocaleDateString(locale, {
   year: "numeric",
   month: "short",
@@ -25,39 +23,23 @@ const formattedDate = pubDate.toLocaleDateString(locale, {
 });
 ---
 
-{cover ? (
-  <!-- Cover card -->
-  <a href={`${prefix}/${slug}`} class="post-card">
+<a href={`${prefix}/${slug}`} class:list={["post-card", cover && "post-card-with-cover"]}>
+  {cover && (
     <div class="post-card-cover">
-      <img src={cover} alt={title} loading="lazy" decoding="async" />
-      <div class="post-card-cover-overlay">
-        <div class="post-card-cover-title">{title}</div>
-        <div class="post-card-cover-desc">{description}</div>
-      </div>
+      <img src={cover} alt="" loading="lazy" decoding="async" />
     </div>
-    <div class="post-card-plain" style="padding: 12px 20px;">
-      <div class="post-card-meta">
-        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-        <span class:list={[categoryClass, "post-card-category"]}>{category}</span>
-        {tags && tags.length > 0 && tags.slice(0, 2).map((tag) => (
-          <span class="text-xs opacity-60">#{tag}</span>
-        ))}
-      </div>
+  )}
+  <div class="post-card-plain">
+    <div class="post-card-meta">
+      <span class="post-card-category">{category}</span>
+      <time datetime={pubDate.toISOString()}>{formattedDate}</time>
     </div>
-  </a>
-) : (
-  <!-- Plain card -->
-  <a href={`${prefix}/${slug}`} class="post-card">
-    <div class="post-card-plain">
-      <div class="post-card-title">{title}</div>
-      <div class="post-card-excerpt">{description}</div>
-      <div class="post-card-meta">
-        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-        <span class:list={[categoryClass, "post-card-category"]}>{category}</span>
-        {tags && tags.length > 0 && tags.slice(0, 3).map((tag) => (
-          <span class="text-xs opacity-60">#{tag}</span>
-        ))}
+    <h2 class="post-card-title">{title}</h2>
+    <p class="post-card-excerpt">{description}</p>
+    {tags && tags.length > 0 && (
+      <div class="post-card-tags">
+        {tags.slice(0, 3).map((tag) => <span>#{tag}</span>)}
       </div>
-    </div>
-  </a>
-)}
+    )}
+  </div>
+</a>

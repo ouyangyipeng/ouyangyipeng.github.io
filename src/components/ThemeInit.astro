@@ -1,0 +1,12 @@
+<script is:inline>
+  (() => {
+    let theme;
+    try {
+      theme = localStorage.getItem("theme");
+    } catch {
+      console.warn("Theme preference storage is unavailable; using light theme.");
+    }
+    const dark = theme === "dark";
+    document.documentElement.classList.toggle("dark", dark);
+  })();
+</script>

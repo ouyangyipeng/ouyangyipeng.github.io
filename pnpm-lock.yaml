@@ -23,6 +23,9 @@ importers:
       astro:
         specifier: ^5.12.3
         version: 5.18.1(@types/node@24.13.2)(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.60.3)(typescript@5.9.3)
+      sharp:
+        specifier: 0.34.5
+        version: 0.34.5
       tailwindcss:
         specifier: ^4.1.11
         version: 4.3.0

@@ -2,179 +2,66 @@
 import { getSiteConfig } from "../config";
 import { ui } from "../i18n/ui";
 import type { Lang } from "../config/types";
-
-interface Props {
-  lang: Lang;
-}
-
+interface Props { lang: Lang; }
 const { lang } = Astro.props;
-const siteConfig = getSiteConfig(lang);
+const { research } = getSiteConfig(lang);
 const t = ui[lang];
-
-const pinnedPapers = siteConfig.research.filter((p) => p.pinned);
-const otherPapers = siteConfig.research.filter((p) => !p.pinned);
+const papers = [...research.filter(paper => paper.pinned), ...research.filter(paper => !paper.pinned)];
+function statusLabel(status: string): string {
+  if (status === "accepted") return t.statusAccepted;
+  if (status === "submitting") return t.statusSubmitting;
+  return t.statusPreprint;
+}
 ---
-
-<section id="research" class="py-16 md:py-24">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-12">
-      {t.sectionResearch}
-    </h2>
-
-    <!-- Pinned papers -->
-    {pinnedPapers.length > 0 && (
-      <div class="mb-12">
-        <div class="space-y-8">
-          {pinnedPapers.map((paper) => (
-            <div
-              class="p-6 sm:p-8 rounded-xl border-2 bg-white"
-              style={`border-color: ${siteConfig.personal.accentColor}`}
-            >
-              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-                <h3 class="text-lg sm:text-xl font-bold text-gray-900">
-                  {paper.title}
-                </h3>
-                <div class="flex flex-wrap gap-2">
-                  {paper.status && (
-                    <span
-                      class={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
-                        paper.status === "accepted"
-                          ? "bg-green-100 text-green-800"
-                          : paper.status === "submitting"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-purple-100 text-purple-800"
-                      }`}
-                    >
-                      {paper.status === "accepted"
-                        ? t.statusAccepted
-                        : paper.status === "submitting"
-                        ? t.statusSubmitting
-                        : t.statusPreprint}
-                    </span>
-                  )}
-                  {paper.level && (
-                    <span class="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                      {paper.level}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <p class="text-sm text-gray-500 mb-2">
-                {paper.venue}
-              </p>
-              <p class="text-sm text-gray-600 mb-3">
-                {paper.authors}
-              </p>
-              {paper.myRole && (
-                <p class="text-sm font-medium mb-2" style={`color: ${siteConfig.personal.accentColor}`}>
-                  {paper.myRole}
-                </p>
-              )}
-              {paper.contribution && (
-                <p class="text-sm text-gray-500 mb-3 leading-6">
-                  {paper.contribution}
-                </p>
-              )}
-              {paper.creditRoles && paper.creditRoles.length > 0 && (
-                <p class="text-sm text-gray-500 mb-2">
-                  <span class="font-medium">{t.creditLabel}:</span> {paper.creditRoles.join(", ")}
-                </p>
-              )}
-              {paper.dois && paper.dois.length > 0 && (
-                <div class="flex flex-wrap gap-2 mt-2">
-                  {paper.dois.map((doi) => (
-                    <a
-                      href={`https://doi.org/${doi}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-                    >
-                      {t.doiLabel}: {doi}
-                    </a>
-                  ))}
-                </div>
-              )}
-              {paper.link && (
-                <a
-                  href={paper.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center mt-3 text-sm font-medium transition-colors"
-                  style={`color: ${siteConfig.personal.accentColor}`}
-                >
-                  Link →
-                </a>
-              )}
+<section id="research" class="section">
+  <div class="site-container">
+    <div class="section-heading"><span class="section-index" aria-hidden="true">04</span><h2 class="section-title">{t.sectionResearch}</h2></div>
+    <div class="papers">
+      {papers.map((paper, index) => (
+        <article class:list={["paper", {"paper-featured": paper.pinned}]}>
+          <div class="paper-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}<span></span></div>
+          <div class="paper-content">
+            <div class="paper-meta">
+              {paper.status && <span class:list={["paper-status", paper.status]}><i aria-hidden="true"></i>{statusLabel(paper.status)}</span>}
+              <span>{paper.venue}</span>
+              {paper.level && <span>{paper.level}</span>}
             </div>
-          ))}
-        </div>
-      </div>
-    )}
-
-    <!-- Other papers -->
-    {otherPapers.length > 0 && (
-      <div class="space-y-6">
-        {otherPapers.map((paper) => (
-          <div class="p-5 sm:p-6 rounded-xl border border-gray-200 bg-white">
-            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
-              <h3 class="text-base sm:text-lg font-bold text-gray-900">
-                {paper.title}
-              </h3>
-              <div class="flex flex-wrap gap-2">
-                {paper.status && (
-                  <span
-                    class={`px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
-                      paper.status === "accepted"
-                        ? "bg-green-100 text-green-800"
-                        : paper.status === "submitting"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-purple-100 text-purple-800"
-                    }`}
-                  >
-                    {paper.status === "accepted"
-                      ? t.statusAccepted
-                      : paper.status === "submitting"
-                      ? t.statusSubmitting
-                      : t.statusPreprint}
-                  </span>
-                )}
-                {paper.level && (
-                  <span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
-                    {paper.level}
-                  </span>
-                )}
-              </div>
+            <h3>{paper.link ? <a href={paper.link} target="_blank" rel="noopener noreferrer">{paper.title}<span class="external" aria-hidden="true">↗</span></a> : paper.title}</h3>
+            <p class="paper-authors">{paper.authors}</p>
+            {paper.contribution && <p class="paper-contribution">{paper.contribution}</p>}
+            <div class="paper-details">
+              {paper.myRole && <span class="paper-role">{paper.myRole}</span>}
+              {paper.dois?.map(doi => <a class="doi-link" href={`https://doi.org/${doi}`} target="_blank" rel="noopener noreferrer">{t.doiLabel}: {doi} ↗</a>)}
+              {paper.link && <a class="text-link" href={paper.link} target="_blank" rel="noopener noreferrer">{lang === "zh" ? "查看研究" : "View research"}<span aria-hidden="true">↗</span></a>}
             </div>
-            <p class="text-sm text-gray-500 mb-1">
-              {paper.venue}
-            </p>
-            <p class="text-sm text-gray-600 mb-2">
-              {paper.authors}
-            </p>
-            {paper.myRole && (
-              <p class="text-sm font-medium" style={`color: ${siteConfig.personal.accentColor}`}>
-                {paper.myRole}
-              </p>
-            )}
-            {paper.contribution && (
-              <p class="text-sm text-gray-500 mt-1">
-                {paper.contribution}
-              </p>
-            )}
-            {paper.link && (
-              <a
-                href={paper.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center mt-2 text-sm font-medium transition-colors"
-                style={`color: ${siteConfig.personal.accentColor}`}
-              >
-                Link →
-              </a>
-            )}
+            {paper.creditRoles?.length && <p class="paper-credits">{t.creditLabel}: {paper.creditRoles.join(", ")}</p>}
           </div>
-        ))}
-      </div>
-    )}
+        </article>
+      ))}
+    </div>
   </div>
 </section>
+<style>
+  .papers { border-top: 1px solid var(--border-primary); }
+  .paper { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 28px; padding-block: 38px; border-bottom: 1px solid var(--border-primary); }
+  .paper-number { display: flex; align-items: center; align-self: start; gap: 16px; padding-top: 6px; font: 12px var(--font-mono); color: var(--text-tertiary); }
+  .paper-number span { width: 24px; height: 1px; background: var(--border-primary); }
+  .paper-featured .paper-number { color: var(--accent-color); }
+  .paper-featured .paper-number span { background: var(--accent-color); }
+  .paper-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; color: var(--text-tertiary); font: 12px/1.7 var(--font-mono); margin-bottom: 12px; }
+  .paper-status { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; color: var(--text-secondary); }
+  .paper-status i { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-color); }
+  .paper-status.accepted i { background: #179365; }
+  .paper-status.submitting i { background: #bd8a26; }
+  h3 { margin: 0; max-width: 50ch; font-size: clamp(19px, 2.1vw, 25px); font-weight: 600; color: var(--text-primary); line-height: 1.45; letter-spacing: -.025em; }
+  h3 a { color: inherit; text-decoration: none; transition: color .2s; }
+  h3 a:hover { color: var(--accent-color); }
+  .external { color: var(--accent-color); font-size: 17px; display: inline-block; margin-left: 10px; }
+  .paper-authors { color: var(--text-tertiary); font-size: 14px; margin: 12px 0 0; }
+  .paper-contribution { max-width: 80ch; font-size: 15px; line-height: 1.8; color: var(--text-secondary); margin: 18px 0 0; }
+  .paper-details { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 22px; margin-top: 20px; font-size: 12px; }
+  .paper-role { color: var(--text-primary); font-weight: 600; }
+  .doi-link { color: var(--text-tertiary); font-family: var(--font-mono); overflow-wrap: anywhere; }
+  .paper-credits { color: var(--text-tertiary); font-size: 12px; margin-top: 14px; }
+  @media (max-width: 640px) { .paper { grid-template-columns: 1fr; gap: 16px; padding-block: 30px; } .paper-number { padding: 0; } .paper-meta { font-size: 11px; } }
+</style>

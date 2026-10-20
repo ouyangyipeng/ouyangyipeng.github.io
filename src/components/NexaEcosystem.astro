@@ -1,92 +1,56 @@
 ---
 import { getSiteConfig } from "../config";
-import { ui } from "../i18n/ui";
 import type { Lang } from "../config/types";
-
-interface Props {
-  lang: Lang;
-}
-
+interface Props { lang: Lang; }
 const { lang } = Astro.props;
-const siteConfig = getSiteConfig(lang);
-const t = ui[lang];
+const { nexa } = getSiteConfig(lang);
+const actions = [
+  [lang === "zh" ? "项目主页" : "Homepage", nexa.homepage], ["GitHub", nexa.github],
+  [lang === "zh" ? "论文" : "Paper", nexa.paper], [lang === "zh" ? "文档" : "Docs", nexa.docs],
+].filter((entry): entry is [string, string] => Boolean(entry[1]));
 ---
-
-<section id="nexa" class="py-16 md:py-24 bg-purple-50">
-  <div class="max-w-7xl mx-auto px-6 lg:px-8">
-    <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-8">
-      {t.sectionNexaProject}
-    </h2>
-
-    <p class="text-base sm:text-lg leading-7 text-gray-600 mb-6">
-      {siteConfig.nexa.intro}
-    </p>
-
-    <!-- Action buttons -->
-    <div class="flex flex-wrap gap-3 mb-8">
-      {siteConfig.nexa.homepage && (
-        <a
-          href={siteConfig.nexa.homepage}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
-          style={`background-color: ${siteConfig.personal.accentColor}`}
-        >
-          Homepage →
-        </a>
-      )}
-      {siteConfig.nexa.github && (
-        <a
-          href={siteConfig.nexa.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors"
-          style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}
-        >
-          GitHub →
-        </a>
-      )}
-      {siteConfig.nexa.paper && (
-        <a
-          href={siteConfig.nexa.paper}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors"
-          style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}
-        >
-          Paper →
-        </a>
-      )}
-      {siteConfig.nexa.docs && (
-        <a
-          href={siteConfig.nexa.docs}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium border-2 transition-colors"
-          style={`border-color: ${siteConfig.personal.accentColor}; color: ${siteConfig.personal.accentColor}`}
-        >
-          Docs →
-        </a>
-      )}
+<article id="nexa" class="nexa-section" aria-labelledby="nexa-title">
+    <div class="nexa-feature">
+      <div class="nexa-intro">
+        <h3 id="nexa-title" class="nexa-wordmark">Nexa<span>.</span></h3>
+        <p>{nexa.intro}</p>
+        <div class="nexa-actions">{actions.map(([label, href]) => <a href={href} class="text-link" target="_blank" rel="noopener noreferrer">{label}<span aria-hidden="true">↗</span></a>)}</div>
+      </div>
+      <div class="nexa-visual" aria-hidden="true">
+        <div class="orbital orbital-one"></div><div class="orbital orbital-two"></div><div class="orbital orbital-three"></div>
+        <img class="nexa-core" src="/images/nexa-logo-noframe.png" alt="" width="96" height="96" loading="lazy" />
+        <span class="orbit-node node-one"></span><span class="orbit-node node-two"></span><span class="orbit-node node-three"></span>
+        <span class="visual-coordinate">01 / ∞</span>
+      </div>
     </div>
-
-    <!-- Ecosystem links as simple list -->
-    <div class="space-y-3">
-      {siteConfig.nexa.links.map((link) => (
-        <div class="flex items-center gap-3">
-          <span class="text-lg">{link.icon || "🔗"}</span>
-          <a
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-sm font-bold transition-colors"
-            style={`color: ${siteConfig.personal.accentColor}`}
-          >
-            {link.name}
-          </a>
-          <span class="text-sm text-gray-500">— {link.description}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+    <div class="ecosystem">{nexa.links.map((link, index) => (
+      <a href={link.url} class="ecosystem-link" target="_blank" rel="noopener noreferrer">
+        <span class="ecosystem-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+        <span><strong>{link.name}</strong><span class="ecosystem-description">{link.description}</span></span>
+        <span class="ecosystem-arrow" aria-hidden="true">↗</span>
+      </a>
+    ))}</div>
+</article>
+<style>
+  .nexa-section { scroll-margin-top: 112px; }
+  .nexa-feature { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 60px; align-items: center; }
+  .nexa-wordmark { margin: 0; font: 500 clamp(56px, 7vw, 84px)/1 var(--font-mono); letter-spacing: -.08em; color: var(--text-primary); }
+  .nexa-wordmark span { color: var(--accent-color); }
+  .nexa-intro p { font-size: 17px; line-height: 1.9; margin: 28px 0; max-width: 60ch; }
+  .nexa-actions { display: flex; flex-wrap: wrap; gap: 20px 30px; font-size: 13px; }
+  .nexa-visual { position: relative; height: 300px; display: grid; place-items: center; overflow: hidden; background: radial-gradient(ellipse, var(--hero-glow), transparent 65%); }
+  .nexa-core { position: relative; width: 96px; height: 96px; object-fit: contain; }
+  .orbital { position: absolute; width: 250px; height: 140px; border: 1px solid var(--border-primary); border-radius: 50%; transform: rotate(-30deg); }
+  .orbital-two { transform: rotate(30deg); }
+  .orbital-three { transform: rotate(90deg); }
+  .orbit-node { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-color); box-shadow: 0 0 18px var(--accent-color); }
+  .node-one { transform: translate(100px, -60px); }.node-two { transform: translate(-100px, -60px); }.node-three { transform: translate(0, 125px); }
+  .visual-coordinate { position: absolute; bottom: 0; right: 0; font: 10px var(--font-mono); color: var(--text-tertiary); }
+  .ecosystem { margin-top: 54px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; }
+  .ecosystem-link { display: grid; grid-template-columns: 24px 1fr 20px; gap: 16px; align-items: baseline; padding-block: 22px; border-top: 1px solid var(--border-primary); color: var(--text-primary); text-decoration: none; }
+  .ecosystem-number { font: 11px var(--font-mono); color: var(--text-tertiary); }
+  .ecosystem-link strong { font-size: 15px; font-weight: 500; }
+  .ecosystem-description { display: block; font-size: 13px; color: var(--text-tertiary); line-height: 1.7; margin-top: 7px; }
+  .ecosystem-arrow { color: var(--accent-color); transition: transform .2s; }.ecosystem-link:hover .ecosystem-arrow { transform: translate(3px, -3px); }
+  @media (max-width: 760px) { .nexa-feature { grid-template-columns: 1fr; gap: 24px; } .nexa-visual { height: 220px; }.orbital { width: 210px; height: 115px; }.node-three { transform: translate(0, 103px); }.ecosystem { grid-template-columns: 1fr; margin-top: 40px; }.nexa-intro p { font-size: 16px; } }
+</style>
